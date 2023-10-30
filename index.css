@@ -1,0 +1,133 @@
+.grid{
+        
+    display: grid;
+    grid-template-columns:  25% 25% 25% 25%;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 20px;
+    width: 900px;       
+    font-family: monospace;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 200px;
+       
+
+}
+div{
+    border-radius: 4px;
+}
+img{
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+}
+
+.enero{
+    grid-column: 1;
+    grid-row: 1;
+    background-color: blue;
+    color: white;
+    
+    
+}
+.febrero{
+    grid-column: 2;
+    grid-row: 1;
+    background-color: red;
+}
+.marzo{
+    grid-column: 3;
+    grid-row: 1;
+    background-color: green;
+}
+.abril{
+    grid-column: 4;
+    grid-row: 1;
+    background-color: yellow;
+}
+.mayo{
+    grid-column: 1;
+    grid-row: 2;
+    background-color: orange;
+}
+.junio{
+    grid-column: 2;
+    grid-row: 2;
+    background-color: purple;
+    color: white;
+}
+.julio{
+    grid-column: 3;
+    grid-row: 2;
+    background-color: pink;
+}
+.agosto{
+    grid-column: 4;
+    grid-row: 2;
+    background-color: brown;
+    color: white;
+}
+.septiembre{
+    grid-column: 1;
+    grid-row: 3;
+    background-color: black;
+    color: white;
+}
+.octubre{
+    grid-column: 2;
+    grid-row: 3;
+    background-color: gray;
+}
+.noviembre{
+    grid-column: 3;
+    grid-row: 3;
+    background-color: white;
+}
+.diciembre{
+    grid-column: 4;
+    grid-row: 3;
+    background-color: cyan;
+}
+
+header{
+    height: 130px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background:linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+    text-align: center;
+    padding: 20px 20px 0px 20px;
+    width: 900px;
+    margin-left: 225px;
+    margin-bottom: 80px;
+    margin-top: 80px;
+    
+}
+h2{
+    background:rgba(0,212,255,0.5);
+    text-align: center;
+    font-size: 20px;
+    padding: 30px;
+    font-family: monospace;
+    margin: 8px;
+    border-radius: 2rem;
+    border: 2px solid white;
+}
+img:hover{
+    transform: scale(1.8);
+    transition: 0.5s;
+    padding: 10px;
+    border-radius: 2px;
+
+    
+    background-color: rgba(0,212,255,0.5);
+}
+
+body{    
+    width: auto;
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+    
+}
+.container{
+    margin: 0 auto;
+    padding-left: 220px;
+}
+    
