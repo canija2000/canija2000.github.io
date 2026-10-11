@@ -210,12 +210,15 @@ Y_i = \beta_0 + \beta_1 x_i + \epsilon_i
 <p>Notemos que si queremos evaluar el modelo para un grupo especifico, no podemos evaluarlo para otro, es decir, considere las siguientes representaciones: - <span class="math inline">U_1=</span> 1 sí el país pertenece a la OCDE, 0 en caso contrario. - <span class="math inline">U_2=</span> 1 sí el país pertenece a África, 0 en caso contrario. - <span class="math inline">U_3=</span> 1 sí el país pertenece a otros, 0 en caso contrario.</p>
 <p>Esto implica que <span class="math inline">U_1 + U_2 + U_3 = 1</span> para cualquier fila. Meter esto dentro del modelo puede ser enredado, así que en primer lugar, fijemos los datos en alguno de los grupos y hacemos una regresión sobre este asi: <span class="math display">
 \begin{align}
-\matbb{E}(Y| x, oecd) = \gamma_{0,oecd} + \gamma_{1,oecd}x \\
+\mathbb{E}(Y| x, oecd) = \gamma_{0,oecd} + \gamma_{1,oecd}x \\
 \mathbb{E}(Y| x, africa) = \gamma_{0,africa} + \gamma_{1,africa}x \\
 \mathbb{E}(Y| x, otros) = \gamma_{0,otros} + \gamma_{1,otros}x
 \end{align}
 </span></p>
 <p>Es decir, estas expresión representan la <strong>esperanza condicional</strong> : el valor medio de la respuesta que esperamos para un pais con ese valor <span class="math inline">x</span> para ese grupo. Notemos que cada grupo tiene su propio intercepto y pendiente [designado con el subíndice]. Veamos entonces que para trabajar con estos tres grupos tenemos en total <span class="math inline">3</span> interceptos y <span class="math inline">3</span> pendientes, es decir, <span class="math inline">6</span> parámetros a estimar.</p>
+<p>De manera más compacta y llamando <span class="math inline">j</span> al grupo, podemos escribir: <span class="math display">
+\mathbb{E}(Y| x, j) = \gamma_{0,j} + \gamma_{1,j}x
+</span></p>
 
 
 
