@@ -271,6 +271,16 @@ Table&nbsp;1: Parámetros por grupo
 </div>
 </figure>
 </div>
+<p>Considerando estos antecedentes, es que podemos escribir lo siguiente: <span class="math display">
+\mathbb{E}(Y| x,\text{grupo}) = \beta_0 + \beta_{02}U_2 + \beta_{03}U_3 + \beta_1x + \beta_{12}U_2x + \beta_{13}U_3x
+</span></p>
+<p>Lo bonito es que nos permite escribir una ecuación en lugar de 3. Veamos que si <span class="math inline">U_2 = U_3 = 0</span> (es decir, el país pertenece a la OCDE), entonces la ecuación se reduce a: <span class="math display">
+\mathbb{E}(Y| x, \text{OCDE}) = \beta_0 + \beta_1x
+</span></p>
+<p>Y analogamente para los otros casos, las expresiones correspondientes se anulan cuando uno de los <span class="math inline">U_j = 0</span>. Notemos además que <span class="math inline">\beta_1</span> es la pendiente base sobre la cual trabajamos. Si se llega activar <span class="math inline">U_2</span> o <span class="math inline">U_3</span>, entonces la pendiente se modifica con <span class="math inline">\beta_{12}</span> o <span class="math inline">\beta_{13}</span> respectivamente. Vale la pena notar, que podemos plantear la siguiente regresión: <span class="math display">
+\mathbb{E}(Y|x, \text{grupo}) = \beta_0 + \beta_{02}U_2 + \beta_{03}U_3 + \beta_1x
+</span></p>
+<p>Es decir, los grupos pueden tener niveles diferentes de esperanza de vida, pero la esperanza de vida cambia a la misma tasa respecto de (x).</p>
 
 
 
