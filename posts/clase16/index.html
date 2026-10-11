@@ -28,6 +28,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -288,8 +323,47 @@ Table&nbsp;1: Parámetros por grupo
 \mathbb{E}(Y|x, \text{grupo}) = \beta_0 + \beta_{02}U_2 + \beta_{03}U_3 + \beta_1x
 </span></p>
 <p>Es decir, los grupos pueden tener niveles diferentes de esperanza de vida, pero la esperanza de vida cambia a la misma tasa respecto de (x).</p>
-<p>En particular, podemos pensar en tres estrategias/formas de presentar esta regresión: |Modelo| intercepto | pendiente | |——|:———-:|:———:| |<span class="math inline">Y ~ x</span>| <span class="math inline">\beta_0</span> | <span class="math inline">\beta_1</span> | |<span class="math inline">Y ~ x + \text{grupo}</span>| <span class="math inline">\beta_0 + \beta_{02}U_2 + \beta_{03}U_3</span> | <span class="math inline">\beta_1</span> | |<span class="math inline">Y ~ x *\text{grupo}</span>| <span class="math inline">\beta_0 + \beta_{02}U_2 + \beta_{03}U_3</span> | <span class="math inline">\beta_1 + \beta_{12}U_2 + \beta_{13}U_3</span> |</p>
-<p>: Rectas de regresión por grupo {#tbl-regresion}</p>
+<p>En particular, podemos pensar en tres estrategias/formas de presentar esta regresión:</p>
+<div id="tbl-regresion" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-regresion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Rectas de regresión por grupo
+</figcaption>
+<div aria-describedby="tbl-regresion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 41%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th style="text-align: center;">intercepto</th>
+<th style="text-align: center;">pendiente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">Y ~ x</span></td>
+<td style="text-align: center;"><span class="math inline">\beta_0</span></td>
+<td style="text-align: center;"><span class="math inline">\beta_1</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">Y ~ x + \text{grupo}</span></td>
+<td style="text-align: center;"><span class="math inline">\beta_0 + \beta_{02}U_2 + \beta_{03}U_3</span></td>
+<td style="text-align: center;"><span class="math inline">\beta_1</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">Y ~ x *\text{grupo}</span></td>
+<td style="text-align: center;"><span class="math inline">\beta_0 + \beta_{02}U_2 + \beta_{03}U_3</span></td>
+<td style="text-align: center;"><span class="math inline">\beta_1 + \beta_{12}U_2 + \beta_{13}U_3</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-modelos" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -302,6 +376,40 @@ Figure&nbsp;1: Ajuste de los tres modelos para lifeExpF según log(ppgdp).
 </figcaption>
 </figure>
 </div>
+</div>
+</div>
+<p>Ahora, ¿cómo elegimos cual es el mejor modelo? Tenemos los estadisticos, en particular vea que haciendo un test-anova tenemos:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(modelo_2, modelo_3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: lifeExpF ~ log(ppgdp) + group
+Model 2: lifeExpF ~ log(ppgdp) * group
+  Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+1    195 5090.4                           
+2    193 5077.7  2    12.675 0.2409 0.7862</code></pre>
+</div>
+</div>
+<p>Es decir tenemos un <span class="math inline">F-test = 0.24</span> y un <span class="math inline">p-value \approx 0.79</span>. Esto nos indica que no hay evidencia suficiente para rechazar la hipótesis nula de que los modelos son iguales, es decir, que el modelo con interacción no es mejor que el modelo sin interacción.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recordemos ANOVA, en este caso, está comparando dos modelos anidados <span class="math inline">M_2 \subset M_3</span>. Notar que : <span class="math display">
+\begin{align}
+M_2 :&amp; \mathbb{E}(Y|x, \text{grupo}) = \beta_0 + \beta_{02}U_2 + \beta_{03}U_3 + \beta_1x + \varepsilon \\
+M_3 :&amp; \mathbb{E}(Y|x, \text{grupo}) = \beta_0 + \beta_{02}U_2 + \beta_{03}U_3 + \beta_1x + \beta_{12}U_2x + \beta_{13}U_3x + \varepsilon
+\end{align}
+</span> Y lo que nos interesaria saber es que si los términos del modelo <span class="math inline">M_3</span> que no están en <span class="math inline">M_2</span> son significativos, es decir, si <span class="math inline">\beta_{12} = \beta_{13} = 0</span>. Osea se plantea la siguiente hipótesis nula: <span class="math display">
+H_0: \beta_{12} = \beta_{13} = 0 \qquad H_1: \text{al menos uno de los dos es distinto de 0}
+</span></p>
 </div>
 </div>
 

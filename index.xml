@@ -86,8 +86,47 @@ Table&nbsp;1: Parámetros por grupo
 <p>Lo bonito es que nos permite escribir una ecuación en lugar de 3. Veamos que si <img src="https://latex.codecogs.com/png.latex?U_2%20=%20U_3%20=%200"> (es decir, el país pertenece a la OCDE), entonces la ecuación se reduce a: <img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BE%7D(Y%7C%20x,%20%5Ctext%7BOCDE%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_1x%0A"></p>
 <p>Y analogamente para los otros casos, las expresiones correspondientes se anulan cuando uno de los <img src="https://latex.codecogs.com/png.latex?U_j%20=%200">. Notemos además que <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"> es la pendiente base sobre la cual trabajamos. Si se llega activar <img src="https://latex.codecogs.com/png.latex?U_2"> o <img src="https://latex.codecogs.com/png.latex?U_3">, entonces la pendiente se modifica con <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7B12%7D"> o <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7B13%7D"> respectivamente. Vale la pena notar, que podemos plantear la siguiente regresión: <img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BE%7D(Y%7Cx,%20%5Ctext%7Bgrupo%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3%20+%20%5Cbeta_1x%0A"></p>
 <p>Es decir, los grupos pueden tener niveles diferentes de esperanza de vida, pero la esperanza de vida cambia a la misma tasa respecto de (x).</p>
-<p>En particular, podemos pensar en tres estrategias/formas de presentar esta regresión: |Modelo| intercepto | pendiente | |——|:———-:|:———:| |<img src="https://latex.codecogs.com/png.latex?Y%20~%20x">| <img src="https://latex.codecogs.com/png.latex?%5Cbeta_0"> | <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"> | |<img src="https://latex.codecogs.com/png.latex?Y%20~%20x%20+%20%5Ctext%7Bgrupo%7D">| <img src="https://latex.codecogs.com/png.latex?%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3"> | <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"> | |<img src="https://latex.codecogs.com/png.latex?Y%20~%20x%20*%5Ctext%7Bgrupo%7D">| <img src="https://latex.codecogs.com/png.latex?%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3"> | <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1%20+%20%5Cbeta_%7B12%7DU_2%20+%20%5Cbeta_%7B13%7DU_3"> |</p>
-<p>: Rectas de regresión por grupo {#tbl-regresion}</p>
+<p>En particular, podemos pensar en tres estrategias/formas de presentar esta regresión:</p>
+<div id="tbl-regresion" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-regresion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Rectas de regresión por grupo
+</figcaption>
+<div aria-describedby="tbl-regresion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 41%">
+<col style="width: 37%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modelo</th>
+<th style="text-align: center;">intercepto</th>
+<th style="text-align: center;">pendiente</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="https://latex.codecogs.com/png.latex?Y%20~%20x"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?%5Cbeta_0"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"></td>
+</tr>
+<tr class="even">
+<td><img src="https://latex.codecogs.com/png.latex?Y%20~%20x%20+%20%5Ctext%7Bgrupo%7D"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"></td>
+</tr>
+<tr class="odd">
+<td><img src="https://latex.codecogs.com/png.latex?Y%20~%20x%20*%5Ctext%7Bgrupo%7D"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3"></td>
+<td style="text-align: center;"><img src="https://latex.codecogs.com/png.latex?%5Cbeta_1%20+%20%5Cbeta_%7B12%7DU_2%20+%20%5Cbeta_%7B13%7DU_3"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-modelos" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -100,6 +139,35 @@ Figure&nbsp;1: Ajuste de los tres modelos para lifeExpF según log(ppgdp).
 </figcaption>
 </figure>
 </div>
+</div>
+</div>
+<p>Ahora, ¿cómo elegimos cual es el mejor modelo? Tenemos los estadisticos, en particular vea que haciendo un test-anova tenemos:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">anova</span>(modelo_2, modelo_3)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: lifeExpF ~ log(ppgdp) + group
+Model 2: lifeExpF ~ log(ppgdp) * group
+  Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+1    195 5090.4                           
+2    193 5077.7  2    12.675 0.2409 0.7862</code></pre>
+</div>
+</div>
+<p>Es decir tenemos un <img src="https://latex.codecogs.com/png.latex?F-test%20=%200.24"> y un <img src="https://latex.codecogs.com/png.latex?p-value%20%5Capprox%200.79">. Esto nos indica que no hay evidencia suficiente para rechazar la hipótesis nula de que los modelos son iguales, es decir, que el modelo con interacción no es mejor que el modelo sin interacción.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recordemos ANOVA, en este caso, está comparando dos modelos anidados <img src="https://latex.codecogs.com/png.latex?M_2%20%5Csubset%20M_3">. Notar que : <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Balign%7D%0AM_2%20:&amp;%20%5Cmathbb%7BE%7D(Y%7Cx,%20%5Ctext%7Bgrupo%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3%20+%20%5Cbeta_1x%20+%20%5Cvarepsilon%20%5C%5C%0AM_3%20:&amp;%20%5Cmathbb%7BE%7D(Y%7Cx,%20%5Ctext%7Bgrupo%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3%20+%20%5Cbeta_1x%20+%20%5Cbeta_%7B12%7DU_2x%20+%20%5Cbeta_%7B13%7DU_3x%20+%20%5Cvarepsilon%0A%5Cend%7Balign%7D%0A"> Y lo que nos interesaria saber es que si los términos del modelo <img src="https://latex.codecogs.com/png.latex?M_3"> que no están en <img src="https://latex.codecogs.com/png.latex?M_2"> son significativos, es decir, si <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7B12%7D%20=%20%5Cbeta_%7B13%7D%20=%200">. Osea se plantea la siguiente hipótesis nula: <img src="https://latex.codecogs.com/png.latex?%0AH_0:%20%5Cbeta_%7B12%7D%20=%20%5Cbeta_%7B13%7D%20=%200%20%5Cqquad%20H_1:%20%5Ctext%7Bal%20menos%20uno%20de%20los%20dos%20es%20distinto%20de%200%7D%0A"></p>
 </div>
 </div>
 
