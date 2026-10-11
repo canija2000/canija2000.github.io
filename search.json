@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this blog"
+  },
+  {
+    "objectID": "posts/clase16/index.html",
+    "href": "posts/clase16/index.html",
+    "title": "Clase 16 - Análisis de Regresión",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "om",
+    "section": "",
+    "text": "Clase 16 - Análisis de Regresión\n\n\n\nprobabilidad\n\nestadística\n\n\n\n\n\n\n\n\n\nOct 7, 2026\n\n\nTristan O’Malley\n\n\n\n\n\nNo matching items"
+  }
+]
