@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Tristan O’Malley">
+<meta name="author" content="Joaquín Bächler">
 <meta name="dcterms.date" content="2026-10-07">
 
 <title>Clase 16 - Análisis de Regresión – om</title>
@@ -76,6 +76,49 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -131,7 +174,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Tristan O’Malley </p>
+               <p>Joaquín Bächler </p>
             </div>
     </div>
       
@@ -157,9 +200,22 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>This is the first post in a Quarto blog. Welcome!</p>
-<p><img src="thumbnail.jpg" class="img-fluid"></p>
-<p>Since this post doesn’t specify an explicit <code>image</code>, the first image in the post will be used in the listing page of posts.</p>
+<p>Partamos de la base de que sabemos que una recta en el plano cartesiano tiene la forma: <span class="math display">y = mx + b</span> Donde <span class="math inline">m</span> es la pendiente y <span class="math inline">b</span> es la intersección con el eje <span class="math inline">y</span>.</p>
+<p>En esta clase vamos a trabajar con un ejemplo de Weisberg, en donde se plantea el siguiente modelo: <span class="math display">
+Y_i = \beta_0 + \beta_1 x_i + \epsilon_i
+</span></p>
+<p>Donde: - <span class="math inline">Y_i</span> es la esperanza de vida femenina del pais <span class="math inline">i</span>. - <span class="math inline">x_i</span> es <span class="math inline">\log(\text{PIB per cápita})</span> del país <span class="math inline">i</span>. - <span class="math inline">\beta_0</span> es la intercepto. - <span class="math inline">\beta_1</span> es la pendiente. - <span class="math inline">\epsilon_i</span> es el error aleatorio [parte del modelo que no logra explicar a <span class="math inline">Y_i</span>].</p>
+<p>De esto podemos preguntarnos dos cosas: (1) ¿la relación entre PIB y esperanza de vida es la misma para todos los grupos de países? (2) ¿La relación tiene que ser una recta o podría ser una curva?</p>
+<p><em>nota: el dataset clasifica a los países en 3 grupos: aquellos que pertenecen a la OCDE, otros, y aquellos que pertenecen a África.</em></p>
+<p>Notemos que si queremos evaluar el modelo para un grupo especifico, no podemos evaluarlo para otro, es decir, considere las siguientes representaciones: - <span class="math inline">U_1=</span> 1 sí el país pertenece a la OCDE, 0 en caso contrario. - <span class="math inline">U_2=</span> 1 sí el país pertenece a África, 0 en caso contrario. - <span class="math inline">U_3=</span> 1 sí el país pertenece a otros, 0 en caso contrario.</p>
+<p>Esto implica que <span class="math inline">U_1 + U_2 + U_3 = 1</span> para cualquier fila. Meter esto dentro del modelo puede ser enredado, así que en primer lugar, fijemos los datos en alguno de los grupos y hacemos una regresión sobre este asi: <span class="math display">
+\begin{align}
+\matbb{E}(Y| x, oecd) = \gamma_{0,oecd} + \gamma_{1,oecd}x \\
+\mathbb{E}(Y| x, africa) = \gamma_{0,africa} + \gamma_{1,africa}x \\
+\mathbb{E}(Y| x, otros) = \gamma_{0,otros} + \gamma_{1,otros}x
+\end{align}
+</span></p>
+<p>Es decir, estas expresión representan la <strong>esperanza condicional</strong> : el valor medio de la respuesta que esperamos para un pais con ese valor <span class="math inline">x</span> para ese grupo. Notemos que cada grupo tiene su propio intercepto y pendiente [designado con el subíndice]. Veamos entonces que para trabajar con estos tres grupos tenemos en total <span class="math inline">3</span> interceptos y <span class="math inline">3</span> pendientes, es decir, <span class="math inline">6</span> parámetros a estimar.</p>
 
 
 

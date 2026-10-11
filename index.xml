@@ -13,7 +13,7 @@
 <lastBuildDate>Wed, 07 Oct 2026 03:00:00 GMT</lastBuildDate>
 <item>
   <title>Clase 16 - Análisis de Regresión</title>
-  <dc:creator>Tristan O&#39;Malley</dc:creator>
+  <dc:creator>Joaquín Bächler</dc:creator>
   <link>https://canija2000.github.io/posts/clase16/</link>
   <description><![CDATA[ 
 
@@ -21,9 +21,14 @@
 
 
 
-<p>This is the first post in a Quarto blog. Welcome!</p>
-<p><img src="https://canija2000.github.io/posts/clase16/thumbnail.jpg" class="img-fluid"></p>
-<p>Since this post doesn’t specify an explicit <code>image</code>, the first image in the post will be used in the listing page of posts.</p>
+<p>Partamos de la base de que sabemos que una recta en el plano cartesiano tiene la forma: <img src="https://latex.codecogs.com/png.latex?y%20=%20mx%20+%20b"> Donde <img src="https://latex.codecogs.com/png.latex?m"> es la pendiente y <img src="https://latex.codecogs.com/png.latex?b"> es la intersección con el eje <img src="https://latex.codecogs.com/png.latex?y">.</p>
+<p>En esta clase vamos a trabajar con un ejemplo de Weisberg, en donde se plantea el siguiente modelo: <img src="https://latex.codecogs.com/png.latex?%0AY_i%20=%20%5Cbeta_0%20+%20%5Cbeta_1%20x_i%20+%20%5Cepsilon_i%0A"></p>
+<p>Donde: - <img src="https://latex.codecogs.com/png.latex?Y_i"> es la esperanza de vida femenina del pais <img src="https://latex.codecogs.com/png.latex?i">. - <img src="https://latex.codecogs.com/png.latex?x_i"> es <img src="https://latex.codecogs.com/png.latex?%5Clog(%5Ctext%7BPIB%20per%20c%C3%A1pita%7D)"> del país <img src="https://latex.codecogs.com/png.latex?i">. - <img src="https://latex.codecogs.com/png.latex?%5Cbeta_0"> es la intercepto. - <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"> es la pendiente. - <img src="https://latex.codecogs.com/png.latex?%5Cepsilon_i"> es el error aleatorio [parte del modelo que no logra explicar a <img src="https://latex.codecogs.com/png.latex?Y_i">].</p>
+<p>De esto podemos preguntarnos dos cosas: (1) ¿la relación entre PIB y esperanza de vida es la misma para todos los grupos de países? (2) ¿La relación tiene que ser una recta o podría ser una curva?</p>
+<p><em>nota: el dataset clasifica a los países en 3 grupos: aquellos que pertenecen a la OCDE, otros, y aquellos que pertenecen a África.</em></p>
+<p>Notemos que si queremos evaluar el modelo para un grupo especifico, no podemos evaluarlo para otro, es decir, considere las siguientes representaciones: - <img src="https://latex.codecogs.com/png.latex?U_1="> 1 sí el país pertenece a la OCDE, 0 en caso contrario. - <img src="https://latex.codecogs.com/png.latex?U_2="> 1 sí el país pertenece a África, 0 en caso contrario. - <img src="https://latex.codecogs.com/png.latex?U_3="> 1 sí el país pertenece a otros, 0 en caso contrario.</p>
+<p>Esto implica que <img src="https://latex.codecogs.com/png.latex?U_1%20+%20U_2%20+%20U_3%20=%201"> para cualquier fila. Meter esto dentro del modelo puede ser enredado, así que en primer lugar, fijemos los datos en alguno de los grupos y hacemos una regresión sobre este asi: <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Balign%7D%0A%5Cmatbb%7BE%7D(Y%7C%20x,%20oecd)%20=%20%5Cgamma_%7B0,oecd%7D%20+%20%5Cgamma_%7B1,oecd%7Dx%20%5C%5C%0A%5Cmathbb%7BE%7D(Y%7C%20x,%20africa)%20=%20%5Cgamma_%7B0,africa%7D%20+%20%5Cgamma_%7B1,africa%7Dx%20%5C%5C%0A%5Cmathbb%7BE%7D(Y%7C%20x,%20otros)%20=%20%5Cgamma_%7B0,otros%7D%20+%20%5Cgamma_%7B1,otros%7Dx%0A%5Cend%7Balign%7D%0A"></p>
+<p>Es decir, estas expresión representan la <strong>esperanza condicional</strong> : el valor medio de la respuesta que esperamos para un pais con ese valor <img src="https://latex.codecogs.com/png.latex?x"> para ese grupo. Notemos que cada grupo tiene su propio intercepto y pendiente [designado con el subíndice]. Veamos entonces que para trabajar con estos tres grupos tenemos en total <img src="https://latex.codecogs.com/png.latex?3"> interceptos y <img src="https://latex.codecogs.com/png.latex?3"> pendientes, es decir, <img src="https://latex.codecogs.com/png.latex?6"> parámetros a estimar.</p>
 
 
 
