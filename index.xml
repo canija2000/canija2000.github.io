@@ -86,6 +86,22 @@ Table&nbsp;1: Parámetros por grupo
 <p>Lo bonito es que nos permite escribir una ecuación en lugar de 3. Veamos que si <img src="https://latex.codecogs.com/png.latex?U_2%20=%20U_3%20=%200"> (es decir, el país pertenece a la OCDE), entonces la ecuación se reduce a: <img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BE%7D(Y%7C%20x,%20%5Ctext%7BOCDE%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_1x%0A"></p>
 <p>Y analogamente para los otros casos, las expresiones correspondientes se anulan cuando uno de los <img src="https://latex.codecogs.com/png.latex?U_j%20=%200">. Notemos además que <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"> es la pendiente base sobre la cual trabajamos. Si se llega activar <img src="https://latex.codecogs.com/png.latex?U_2"> o <img src="https://latex.codecogs.com/png.latex?U_3">, entonces la pendiente se modifica con <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7B12%7D"> o <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7B13%7D"> respectivamente. Vale la pena notar, que podemos plantear la siguiente regresión: <img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BE%7D(Y%7Cx,%20%5Ctext%7Bgrupo%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3%20+%20%5Cbeta_1x%0A"></p>
 <p>Es decir, los grupos pueden tener niveles diferentes de esperanza de vida, pero la esperanza de vida cambia a la misma tasa respecto de (x).</p>
+<p>En particular, podemos pensar en tres estrategias/formas de presentar esta regresión: |Modelo| intercepto | pendiente | |——|:———-:|:———:| |<img src="https://latex.codecogs.com/png.latex?Y%20~%20x">| <img src="https://latex.codecogs.com/png.latex?%5Cbeta_0"> | <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"> | |<img src="https://latex.codecogs.com/png.latex?Y%20~%20x%20+%20%5Ctext%7Bgrupo%7D">| <img src="https://latex.codecogs.com/png.latex?%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3"> | <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1"> | |<img src="https://latex.codecogs.com/png.latex?Y%20~%20x%20*%5Ctext%7Bgrupo%7D">| <img src="https://latex.codecogs.com/png.latex?%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3"> | <img src="https://latex.codecogs.com/png.latex?%5Cbeta_1%20+%20%5Cbeta_%7B12%7DU_2%20+%20%5Cbeta_%7B13%7DU_3"> |</p>
+<p>: Rectas de regresión por grupo {#tbl-regresion}</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-modelos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modelos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://canija2000.github.io/posts/clase16/index_files/figure-html/fig-modelos-1.png" class="img-fluid figure-img" width="1056">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modelos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Ajuste de los tres modelos para lifeExpF según log(ppgdp).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
 

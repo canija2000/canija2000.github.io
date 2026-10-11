@@ -288,6 +288,22 @@ Table&nbsp;1: Parámetros por grupo
 \mathbb{E}(Y|x, \text{grupo}) = \beta_0 + \beta_{02}U_2 + \beta_{03}U_3 + \beta_1x
 </span></p>
 <p>Es decir, los grupos pueden tener niveles diferentes de esperanza de vida, pero la esperanza de vida cambia a la misma tasa respecto de (x).</p>
+<p>En particular, podemos pensar en tres estrategias/formas de presentar esta regresión: |Modelo| intercepto | pendiente | |——|:———-:|:———:| |<span class="math inline">Y ~ x</span>| <span class="math inline">\beta_0</span> | <span class="math inline">\beta_1</span> | |<span class="math inline">Y ~ x + \text{grupo}</span>| <span class="math inline">\beta_0 + \beta_{02}U_2 + \beta_{03}U_3</span> | <span class="math inline">\beta_1</span> | |<span class="math inline">Y ~ x *\text{grupo}</span>| <span class="math inline">\beta_0 + \beta_{02}U_2 + \beta_{03}U_3</span> | <span class="math inline">\beta_1 + \beta_{12}U_2 + \beta_{13}U_3</span> |</p>
+<p>: Rectas de regresión por grupo {#tbl-regresion}</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-modelos" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modelos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-modelos-1.png" class="img-fluid figure-img" width="1056">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modelos-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Ajuste de los tres modelos para lifeExpF según log(ppgdp).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
 
 
 
