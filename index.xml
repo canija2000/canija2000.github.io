@@ -10,7 +10,7 @@
 <atom:link href="https://canija2000.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>A blog built with Quarto</description>
 <generator>quarto-1.10.19</generator>
-<lastBuildDate>Wed, 07 Oct 2026 03:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 10 Oct 2026 03:00:00 GMT</lastBuildDate>
 <item>
   <title>Clase 16 - Análisis de Regresión</title>
   <dc:creator>Joaquín Bächler</dc:creator>
@@ -21,6 +21,8 @@
 
 
 
+<section id="algo-de-contexto" class="level2">
+<h2 class="anchored" data-anchor-id="algo-de-contexto">algo de contexto</h2>
 <p>Partamos de la base de que sabemos que una recta en el plano cartesiano tiene la forma: <img src="https://latex.codecogs.com/png.latex?y%20=%20mx%20+%20b"> Donde <img src="https://latex.codecogs.com/png.latex?m"> es la pendiente y <img src="https://latex.codecogs.com/png.latex?b"> es la intersección con el eje <img src="https://latex.codecogs.com/png.latex?y">.</p>
 <p>En esta clase vamos a trabajar con un ejemplo de Weisberg, en donde se plantea el siguiente modelo: <img src="https://latex.codecogs.com/png.latex?%0AY_i%20=%20%5Cbeta_0%20+%20%5Cbeta_1%20x_i%20+%20%5Cepsilon_i%0A"></p>
 <p>Donde:</p>
@@ -168,16 +170,374 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>Recordemos ANOVA, en este caso, está comparando dos modelos anidados <img src="https://latex.codecogs.com/png.latex?M_2%20%5Csubset%20M_3">. Notar que : <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Balign%7D%0AM_2%20:&amp;%20%5Cmathbb%7BE%7D(Y%7Cx,%20%5Ctext%7Bgrupo%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3%20+%20%5Cbeta_1x%20+%20%5Cvarepsilon%20%5C%5C%0AM_3%20:&amp;%20%5Cmathbb%7BE%7D(Y%7Cx,%20%5Ctext%7Bgrupo%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3%20+%20%5Cbeta_1x%20+%20%5Cbeta_%7B12%7DU_2x%20+%20%5Cbeta_%7B13%7DU_3x%20+%20%5Cvarepsilon%0A%5Cend%7Balign%7D%0A"> Y lo que nos interesaria saber es que si los términos del modelo <img src="https://latex.codecogs.com/png.latex?M_3"> que no están en <img src="https://latex.codecogs.com/png.latex?M_2"> son significativos, es decir, si <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7B12%7D%20=%20%5Cbeta_%7B13%7D%20=%200">. Osea se plantea la siguiente hipótesis nula: <img src="https://latex.codecogs.com/png.latex?%0AH_0:%20%5Cbeta_%7B12%7D%20=%20%5Cbeta_%7B13%7D%20=%200%20%5Cqquad%20H_1:%20%5Ctext%7Bal%20menos%20uno%20de%20los%20dos%20es%20distinto%20de%200%7D%0A"></p>
+<p>Como vimos, nuestro <img src="https://latex.codecogs.com/png.latex?p=0.79"> es mayor que cualquier nivel de significancia usual, por lo que no hay evidencia suficiente para rechazar la hipótesis nula. De ahí que podemos concluir que el modelo con una pendiente única es suficiente para describir la relación entre PIB y esperanza de vida.</p>
 </div>
+</div>
+</section>
+<section id="regresión-polinomial" class="level2">
+<h2 class="anchored" data-anchor-id="regresión-polinomial">Regresión polinomial</h2>
+<p>Hasta ahora hemos trabajado con modelos lineales, es decir, aquellos presetan la relación entre <img src="https://latex.codecogs.com/png.latex?Y"> y <img src="https://latex.codecogs.com/png.latex?X"> como una recta. En realidad, esto no siempre es cierto, y esta aproximación puede quedarse corta para modelar algo que no puede representarse de esta manera. De ahí nace la nacesidad de extender esta relación a una polinomial. El primer paso que podriamos dar es agregar un término cuadrático, es decir, un modelo de la forma: <img src="https://latex.codecogs.com/png.latex?%0AY%20=%20%5Cbeta_0%20+%20%5Cbeta_1%20X%20+%20%5Cbeta_2%20X%5E2%20+%20%5Cvarepsilon%0A"></p>
+<p>Notemos que la relación cuadratica no viene de la nada, sino que se construye a partir de la relación lineal [esto implica que se relacionan entre sí]. Lo que nos permite el término cuadráctico es darle una forma curva a nuestra relación. En particular, si <img src="https://latex.codecogs.com/png.latex?%5Cbeta_2%20%3E%200"> (<img src="https://latex.codecogs.com/png.latex?%5Ccup">) la relación es convexa, y si <img src="https://latex.codecogs.com/png.latex?%5Cbeta_2%20%3C%200"> la relación es cóncava (<img src="https://latex.codecogs.com/png.latex?%5Ccap">).</p>
+<p>Volvamos a los datos de Weisberg, y veamos que pasa si agregamos un término cuadrático a nuestro modelo.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-modelo-cuadratico" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modelo-cuadratico-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://canija2000.github.io/posts/clase16/index_files/figure-html/fig-modelo-cuadratico-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modelo-cuadratico-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Ajuste de un modelo cuadrático para lifeExpF según log(ppgdp).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(modelo4)</span></code></pre></div></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ver output">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ver output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = lifeExpF ~ I(log(ppgdp)) + I(log(ppgdp)^2), data = UN11)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-26.096  -1.814   1.276   3.284  12.318 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -6.4614    12.3524  -0.523  0.60150    
+I(log(ppgdp))    13.9592     2.9961   4.659 5.85e-06 ***
+I(log(ppgdp)^2)  -0.5320     0.1774  -2.998  0.00307 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.321 on 196 degrees of freedom
+Multiple R-squared:  0.6141,    Adjusted R-squared:  0.6101 
+F-statistic: 155.9 on 2 and 196 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="splines" class="level2">
+<h2 class="anchored" data-anchor-id="splines">Splines</h2>
+<p>Un polinomio global tiene un problema: cada coeficiente afecta a toda la curva, así que lo que pasa en un extremo de los datos termina influyendo en el otro. Los <strong>splines</strong> resuelven esto partiendo el eje <img src="https://latex.codecogs.com/png.latex?x"> en tramos, separados por puntos llamados <strong>knots</strong> (nodos), y ajustando un polinomio de grado <img src="https://latex.codecogs.com/png.latex?d"> en cada tramo. Los polinomios se pegan de forma suave en cada knot: son continuos y tienen derivadas continuas hasta el orden <img src="https://latex.codecogs.com/png.latex?d-1">.</p>
+<p>En R esto se hace con <code>bs()</code> del paquete <code>splines</code>, donde controlamos dos cosas:</p>
+<ul>
+<li><code>degree</code>: el grado del polinomio en cada tramo (<img src="https://latex.codecogs.com/png.latex?d%20=%201"> da rectas por tramos, <img src="https://latex.codecogs.com/png.latex?d%20=%203"> da splines cúbicos).</li>
+<li><code>knots</code>: dónde se corta el eje <img src="https://latex.codecogs.com/png.latex?x">.</li>
+</ul>
+<p>Veamos cómo cambia el ajuste al mover estos dos parámetros:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-splines" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-splines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://canija2000.github.io/posts/clase16/index_files/figure-html/fig-splines-1.png" class="img-fluid figure-img" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-splines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Ajuste de splines para lifeExpF según log(ppgdp) con distintos grados y knots. Las líneas punteadas marcan la ubicación de los knots.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Algunas observaciones:</p>
+<ul>
+<li><strong>Sin knots</strong> el spline cúbico es simplemente un polinomio de grado 3 sobre todo el rango: una sola curva global.</li>
+<li><strong>Grado 1 con 2 knots</strong> da tres rectas unidas en <img src="https://latex.codecogs.com/png.latex?x%20=%208"> y <img src="https://latex.codecogs.com/png.latex?x%20=%2010">. La curva es continua, pero tiene “codos” en los knots porque la pendiente cambia de golpe.</li>
+<li><strong>Grado 3 con 2 knots</strong> mantiene la flexibilidad por tramos, pero la unión es suave: no se ven los cortes.</li>
+<li><strong>Grado 3 con 4 knots</strong> es aún más flexible. Más knots significa más parámetros (el modelo usa <img src="https://latex.codecogs.com/png.latex?d%20+%20K"> columnas más el intercepto, con <img src="https://latex.codecogs.com/png.latex?K"> el número de knots), lo que permite seguir mejor los datos, pero también aumenta el riesgo de sobreajuste.</li>
+</ul>
+<p>En general, podemos aramr un spline cúbico como : <img src="https://latex.codecogs.com/png.latex?%0Af(x)%20=%20%5Cunderbrace%7B%5Cbeta_0%20+%20%5Cbeta_1%20x%20+%20%5Cbeta_2x%5E2%20+%20%5Cbeta_3x%5E3%7D_%7B%5Ctext%7Bpolinomio%20grado%203%7D%7D+%20%5Csum_%7Bj=1%7D%5Ek%20%5Cgamma_j(x%20-%20%5Cxi_j)%5E3_+%0A"></p>
+<p>Notemos que la primera parte la concemos, es la segunda la que nos podria causar confusión.</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?k"> : número de knots/nodos.</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cxi_j"> : ubicación del knot <img src="https://latex.codecogs.com/png.latex?j">.</li>
+<li><img src="https://latex.codecogs.com/png.latex?(x%20-%20%5Cxi_j)%5E3_+"> : es una función que vale 0 si <img src="https://latex.codecogs.com/png.latex?x%20%3C%20%5Cxi_j"> y <img src="https://latex.codecogs.com/png.latex?(x%20-%20%5Cxi_j)%5E3"> si <img src="https://latex.codecogs.com/png.latex?x%20%5Cgeq%20%5Cxi_j">. Esto asegura que el efecto de cada knot solo se aplique a la derecha de su ubicación, y no afecte a los valores de <img src="https://latex.codecogs.com/png.latex?x"> menores que el knot.</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cgamma_j"> : coeficiente que determina la magnitud del efecto del knot <img src="https://latex.codecogs.com/png.latex?j">.</li>
+</ul>
+<section id="smooth-splines" class="level5">
+<h5 class="anchored" data-anchor-id="smooth-splines">smooth splines</h5>
+<p>en este escenario, además de los splines, buscamos que la función sea suave. Esto es: una curva podría pasar muy cerca de todos los puntos observados, pero seguir demasiado de cerca cada fluctuación puede significar que está capturando ruido en lugar de un patrón general.</p>
+<p>La diferencia entre splines cúbicos y splines suavizados es, principalmente, cómo se controla esa flexibilidad: en el primer caso se especifican nudos; en el segundo se controla la suavidad global de la curva [generalmente con el parámetro <img src="https://latex.codecogs.com/png.latex?%5Clambda">].</p>
+<hr>
+</section>
+</section>
+<section id="pca" class="level2">
+<h2 class="anchored" data-anchor-id="pca">PCA</h2>
+<p>Este es un escenario distinto al que veníamos trabajando. Consideremos que ahora, nuestro problema no es cómo ajustar los regresores que tenemos a una variable respuesta, pero <strong>elegir cuales regresores utilizar</strong>. Esto implica que tenemos demasiados y no sabemos cuales son verdaderamente relevantes. Considere que tenemos <img src="https://latex.codecogs.com/png.latex?%0AX_1,%20X_2,%20%5Cldots,%20X_p%0A"></p>
+<p>Si muchos, que es lo más probable, de estos predictores están relacionados entre sí, tenemos el problema de la <strong>multicolinealidad</strong>. Cuando esto ocurre, resulta más difícil entender y separar los efectos individuales de cada predictor. Lo que implica menor precisión en la estimación de los coeficientes de regresión y eventualmente interpretaciones engañosas.</p>
+<p>De ahí nace la idea de utilizar <strong>PCA</strong> [analisis de componentes principales]. Para entender esto, vale la pena recordar de dónde viene y con qué se relaciona esto.\ Esta técnica nace desde el <em>algebra lineal</em>, donde si vivimos en un espacio de dimensión <img src="https://latex.codecogs.com/png.latex?p">, tenemos la implicancia de que ese espacio se origina de <img src="https://latex.codecogs.com/png.latex?p"> vectores linealmente independientes [es decir, no puedo construir ninguno de esos <img src="https://latex.codecogs.com/png.latex?p"> vectores a partir de cualquier otro]. Lo que conlleva a llamar a estos vectores como una <strong>base</strong> del espacio [nos permiten construir cualquier otro vector de este espacio]. La manera de construir un vector es a partir de una combinación lineal de estos:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0Av%20=%20%5Calpha_1%20v_1%20+%20%5Calpha_2%20v_2%20+%20%5Cldots%20+%20%5Calpha_p%20v_p%20%5Cqquad%20%5Calpha_i%20%5Cin%20%5Cmathbb%7BR%7D%0A"></p>
+<p>Lo importante acá es que un mismo espacio tiene <strong>infinitas bases</strong>. La más conocida es la base canónica [en <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D%5E2"> son <img src="https://latex.codecogs.com/png.latex?e_1%20=%20(1,0)"> y <img src="https://latex.codecogs.com/png.latex?e_2%20=%20(0,1)">], pero cualquier otro par de vectores linealmente independientes también genera todo el plano. Cambiar de base no cambia los puntos, solo cambia las coordenadas con las que los describimos.</p>
+<p>Llevemos esto a nuestro problema. Cada observación es un vector en <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D%5Ep"> y, por defecto, la describimos en la base “natural” de nuestras variables: una coordenada para <img src="https://latex.codecogs.com/png.latex?X_1">, otra para <img src="https://latex.codecogs.com/png.latex?X_2">, etc. Pero si las variables están correlacionadas, esta base no es muy eficiente: varias coordenadas están contando la misma historia. La pregunta que se hace PCA es entonces:</p>
+<blockquote class="blockquote">
+<p>¿Existe otra base del mismo espacio, en la que las nuevas coordenadas no estén correlacionadas entre sí y en la que unas pocas direcciones concentren casi toda la información?</p>
+</blockquote>
+<section id="construyendo-la-nueva-base" class="level3">
+<h3 class="anchored" data-anchor-id="construyendo-la-nueva-base">Construyendo la nueva base</h3>
+<p>En PCA, “información” se entiende como <strong>varianza</strong>: una dirección en la que los datos casi no varían no nos ayuda a distinguir una observación de otra. Así que construimos la base dirección por dirección.</p>
+<p>La primera componente principal es una combinación lineal de los predictores [igual que el vector <img src="https://latex.codecogs.com/png.latex?v"> de arriba, pero ahora los <img src="https://latex.codecogs.com/png.latex?%5Calpha_i"> son los que tenemos que encontrar]: <img src="https://latex.codecogs.com/png.latex?%0AZ_1%20=%20%5Cphi_%7B11%7DX_1%20+%20%5Cphi_%7B21%7DX_2%20+%20%5Cldots%20+%20%5Cphi_%7Bp1%7DX_p%0A"></p>
+<p>Elegimos los pesos <img src="https://latex.codecogs.com/png.latex?%5Cphi_1%20=%20(%5Cphi_%7B11%7D,%20%5Cldots,%20%5Cphi_%7Bp1%7D)"> de modo que <img src="https://latex.codecogs.com/png.latex?Z_1"> tenga la <strong>mayor varianza posible</strong>, pidiendo <img src="https://latex.codecogs.com/png.latex?%5C%7C%5Cphi_1%5C%7C%20=%201"> [si no, bastaría con agrandar los pesos para inflar la varianza todo lo que queramos]. Es decir: <img src="https://latex.codecogs.com/png.latex?%0A%5Cphi_1%20=%20%5Carg%5Cmax_%7B%5C%7C%5Cphi%5C%7C%20=%201%7D%20%5Ctext%7BVar%7D(%5Cphi%5E%5Ctop%20X)%20=%20%5Carg%5Cmax_%7B%5C%7C%5Cphi%5C%7C%20=%201%7D%20%5Cphi%5E%5Ctop%20%5CSigma%5C,%20%5Cphi%0A"></p>
+<p>donde <img src="https://latex.codecogs.com/png.latex?%5CSigma"> es la matriz de covarianza de <img src="https://latex.codecogs.com/png.latex?X%20=%20(X_1,%20%5Cldots,%20X_p)">.</p>
+<p>La segunda componente <img src="https://latex.codecogs.com/png.latex?Z_2"> se construye igual, pero con una restricción extra: su dirección <img src="https://latex.codecogs.com/png.latex?%5Cphi_2"> tiene que ser <strong>ortogonal</strong> a <img src="https://latex.codecogs.com/png.latex?%5Cphi_1">. Y así sucesivamente: <img src="https://latex.codecogs.com/png.latex?Z_m"> es la dirección de máxima varianza entre todas las que son ortogonales a las <img src="https://latex.codecogs.com/png.latex?m-1"> anteriores. Al final obtenemos <img src="https://latex.codecogs.com/png.latex?p"> vectores ortonormales <img src="https://latex.codecogs.com/png.latex?%5Cphi_1,%20%5Cldots,%20%5Cphi_p">, es decir, <strong>una nueva base de <img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BR%7D%5Ep"></strong>.</p>
+</section>
+<section id="reducir-la-dimensión" class="level3">
+<h3 class="anchored" data-anchor-id="reducir-la-dimensión">Reducir la dimensión</h3>
+<p>Hasta acá solo cambiamos de base: con las <img src="https://latex.codecogs.com/png.latex?p"> componentes describimos exactamente lo mismo que con las <img src="https://latex.codecogs.com/png.latex?p"> variables originales. La gracia está en que, como ordenamos las componentes por varianza, podemos quedarnos con las primeras <img src="https://latex.codecogs.com/png.latex?M%20%3C%20p"> y perder poca información. Cuánta información conservamos lo mide la <strong>proporción de varianza explicada</strong>: <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BPVE%7D_m%20=%20%5Cfrac%7B%5Clambda_m%7D%7B%5Clambda_1%20+%20%5Clambda_2%20+%20%5Cldots%20+%20%5Clambda_p%7D%0A"></p>
+<p>Si las primeras <img src="https://latex.codecogs.com/png.latex?M"> componentes acumulan, digamos, un 90% de la varianza, el resto aporta poco y lo podemos descartar.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>PCA depende de la escala de las variables. Si una variable se mide en miles y otra en unidades, la primera va a dominar la varianza solo por sus unidades. Por eso, en general, <strong>estandarizamos</strong> cada <img src="https://latex.codecogs.com/png.latex?X_j"> antes de aplicar PCA [media 0 y varianza 1], lo que equivale a trabajar con la matriz de correlación en lugar de la de covarianza.</p>
+<p><em>ademas</em> Hay una precaución importante: PCA maximiza la variabilidad explicada de los predictores (X), no necesariamente su capacidad de predecir (Y). Por eso, retener las componentes que explican más variación no garantiza automáticamente que sean las mejores para una tarea predictiva.</p>
+</div>
+</div>
+</section>
+<section id="volviendo-a-weisberg" class="level3">
+<h3 class="anchored" data-anchor-id="volviendo-a-weisberg">Volviendo a Weisberg</h3>
+<p>Usemos tres predictores de <code>UN11</code> que, intuitivamente, miden algo parecido: la fertilidad, <img src="https://latex.codecogs.com/png.latex?%5Clog(%5Ctext%7BPIB%20per%20c%C3%A1pita%7D)"> y el porcentaje de población urbana. Veamos sus correlaciones:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">X <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span>(UN11, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cbind</span>(fertility, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">log_ppgdp =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log</span>(ppgdp), pctUrban))</span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cor</span>(X), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          fertility log_ppgdp pctUrban
+fertility      1.00     -0.72    -0.54
+log_ppgdp     -0.72      1.00     0.75
+pctUrban      -0.54      0.75     1.00</code></pre>
+</div>
+</div>
+<p>Las tres están bastante correlacionadas entre sí [en valor absoluto, entre 0.54 y 0.75]. Si ajustamos la regresión con las tres:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">modelo_5 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(lifeExpF <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> fertility <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log</span>(ppgdp) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> pctUrban, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> UN11)</span>
+<span id="cb7-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(modelo_5)</span></code></pre></div></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ver output">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ver output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = lifeExpF ~ fertility + log(ppgdp) + pctUrban, data = UN11)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-22.6165  -1.6683   0.5406   2.6425  11.2263 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 64.21764    3.84281  16.711  &lt; 2e-16 ***
+fertility   -4.19652    0.39396 -10.652  &lt; 2e-16 ***
+log(ppgdp)   2.17842    0.42888   5.079 8.83e-07 ***
+pctUrban     0.02116    0.02353   0.900    0.369    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.145 on 195 degrees of freedom
+Multiple R-squared:  0.7456,    Adjusted R-squared:  0.7417 
+F-statistic: 190.5 on 3 and 195 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Notemos que <code>pctUrban</code> sale no significativa [<img src="https://latex.codecogs.com/png.latex?p%20%5Capprox%200.37">], aunque por sí sola sí está asociada a la esperanza de vida. No es que no importe, sino que lo que aporta ya lo están contando las otras dos variables. Este es el síntoma de la multicolinealidad del que hablábamos.</p>
+<p>Apliquemos PCA con <code>prcomp()</code>, estandarizando con <code>scale. = TRUE</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">pca <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">prcomp</span>(X, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">scale. =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb9-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(pca)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Importance of components:
+                          PC1    PC2     PC3
+Standard deviation     1.5315 0.6766 0.44349
+Proportion of Variance 0.7818 0.1526 0.06556
+Cumulative Proportion  0.7818 0.9344 1.00000</code></pre>
+</div>
+</div>
+<p>La primera componente sola explica un 78% de la varianza de los tres predictores, y con dos llegamos al 93%. Veamos ahora los pesos <img src="https://latex.codecogs.com/png.latex?%5Cphi"> de cada componente [en R se llaman <code>rotation</code>, porque cambiar de base ortonormal es, literalmente, rotar los ejes]:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(pca<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>rotation, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            PC1   PC2   PC3
+fertility -0.56 -0.73  0.39
+log_ppgdp  0.61 -0.04  0.79
+pctUrban   0.56 -0.68 -0.47</code></pre>
+</div>
+</div>
+<p>Esto nos permite interpretar las componentes:</p>
+<ul>
+<li><strong>PC1</strong> pesa las tres variables con magnitud similar: negativo en fertilidad y positivo en PIB y urbanización. La podemos leer como un índice de <strong>“desarrollo”</strong>: valores altos corresponden a países ricos, urbanos y con baja fertilidad.</li>
+<li><strong>PC2</strong> contrapone principalmente fertilidad y urbanización, casi sin mirar el PIB. Captura países que se salen del patrón general [por ejemplo, con fertilidad baja pero poca población urbana].</li>
+<li><strong>PC3</strong> concentra solo un 7% de la varianza, así que casi no aporta información.</li>
+</ul>
+<div id="fig-pca" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-pca" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-pca-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-pca-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://canija2000.github.io/posts/clase16/index_files/figure-html/fig-pca-1.png" class="img-fluid figure-img" data-ref-parent="fig-pca" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-pca-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Proporción de varianza explicada (barras) y acumulada (línea).
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-pca" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-pca-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-pca-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://canija2000.github.io/posts/clase16/index_files/figure-html/fig-pca-2.png" class="img-fluid figure-img" data-ref-parent="fig-pca" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-pca-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Países en las dos primeras componentes, coloreados por grupo.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: PCA sobre fertility, log(ppgdp) y pctUrban.
+</figcaption>
+</figure>
+</div>
+<p>Fijémonos en el gráfico de la derecha: sin haberle dicho nada sobre los grupos, PC1 separa casi por sí sola a los países africanos [a la izquierda] de los de la OCDE [a la derecha]. Eso refuerza la lectura de PC1 como un eje de desarrollo.</p>
+</section>
+</section>
+<section id="cerrando" class="level2">
+<h2 class="anchored" data-anchor-id="cerrando">Cerrando</h2>
+<div id="tbl-resumen" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resumen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Resumen de estrategias para análisis de regresión
+</figcaption>
+<div aria-describedby="tbl-resumen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Problema</th>
+<th style="text-align: center;">Estrategia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Comparar grupos controlando por un predictor</td>
+<td style="text-align: center;">Regresión con variables indicadoras, regresión con interacción</td>
+</tr>
+<tr class="even">
+<td>Modelar relaciones no lineales</td>
+<td style="text-align: center;">Regresión polinomial, splines</td>
+</tr>
+<tr class="odd">
+<td>Mucha información en los predictores, multicolinealidad</td>
+<td style="text-align: center;">PCA para reducir la dimensión y eliminar redundancia</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
 </div>
 
 
+</section>
 
  ]]></description>
   <category>probabilidad</category>
   <category>estadística</category>
   <guid>https://canija2000.github.io/posts/clase16/</guid>
-  <pubDate>Wed, 07 Oct 2026 03:00:00 GMT</pubDate>
+  <pubDate>Sat, 10 Oct 2026 03:00:00 GMT</pubDate>
   <media:content url="https://canija2000.github.io/posts/clase16/portada.jpg" medium="image" type="image/jpeg"/>
 </item>
 </channel>

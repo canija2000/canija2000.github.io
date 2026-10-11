@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Joaquín Bächler">
-<meta name="dcterms.date" content="2026-10-07">
+<meta name="dcterms.date" content="2026-10-10">
 
 <title>Clase 16 - Análisis de Regresión – om</title>
 <style>
@@ -223,7 +223,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 7, 2026</p>
+        <p class="date">October 10, 2026</p>
       </div>
     </div>
     
@@ -242,6 +242,8 @@ window.Quarto = {
 
 
 
+<section id="algo-de-contexto" class="level2">
+<h2 class="anchored" data-anchor-id="algo-de-contexto">algo de contexto</h2>
 <p>Partamos de la base de que sabemos que una recta en el plano cartesiano tiene la forma: <span class="math display">y = mx + b</span> Donde <span class="math inline">m</span> es la pendiente y <span class="math inline">b</span> es la intersección con el eje <span class="math inline">y</span>.</p>
 <p>En esta clase vamos a trabajar con un ejemplo de Weisberg, en donde se plantea el siguiente modelo: <span class="math display">
 Y_i = \beta_0 + \beta_1 x_i + \epsilon_i
@@ -410,10 +412,332 @@ M_3 :&amp; \mathbb{E}(Y|x, \text{grupo}) = \beta_0 + \beta_{02}U_2 + \beta_{03}U
 </span> Y lo que nos interesaria saber es que si los términos del modelo <span class="math inline">M_3</span> que no están en <span class="math inline">M_2</span> son significativos, es decir, si <span class="math inline">\beta_{12} = \beta_{13} = 0</span>. Osea se plantea la siguiente hipótesis nula: <span class="math display">
 H_0: \beta_{12} = \beta_{13} = 0 \qquad H_1: \text{al menos uno de los dos es distinto de 0}
 </span></p>
+<p>Como vimos, nuestro <span class="math inline">p=0.79</span> es mayor que cualquier nivel de significancia usual, por lo que no hay evidencia suficiente para rechazar la hipótesis nula. De ahí que podemos concluir que el modelo con una pendiente única es suficiente para describir la relación entre PIB y esperanza de vida.</p>
 </div>
+</div>
+</section>
+<section id="regresión-polinomial" class="level2">
+<h2 class="anchored" data-anchor-id="regresión-polinomial">Regresión polinomial</h2>
+<p>Hasta ahora hemos trabajado con modelos lineales, es decir, aquellos presetan la relación entre <span class="math inline">Y</span> y <span class="math inline">X</span> como una recta. En realidad, esto no siempre es cierto, y esta aproximación puede quedarse corta para modelar algo que no puede representarse de esta manera. De ahí nace la nacesidad de extender esta relación a una polinomial. El primer paso que podriamos dar es agregar un término cuadrático, es decir, un modelo de la forma: <span class="math display">
+Y = \beta_0 + \beta_1 X + \beta_2 X^2 + \varepsilon
+</span></p>
+<p>Notemos que la relación cuadratica no viene de la nada, sino que se construye a partir de la relación lineal [esto implica que se relacionan entre sí]. Lo que nos permite el término cuadráctico es darle una forma curva a nuestra relación. En particular, si <span class="math inline">\beta_2 &gt; 0</span> (<span class="math inline">\cup</span>) la relación es convexa, y si <span class="math inline">\beta_2 &lt; 0</span> la relación es cóncava (<span class="math inline">\cap</span>).</p>
+<p>Volvamos a los datos de Weisberg, y veamos que pasa si agregamos un término cuadrático a nuestro modelo.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-modelo-cuadratico" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-modelo-cuadratico-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-modelo-cuadratico-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-modelo-cuadratico-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Ajuste de un modelo cuadrático para lifeExpF según log(ppgdp).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ver output">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ver output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = lifeExpF ~ I(log(ppgdp)) + I(log(ppgdp)^2), data = UN11)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-26.096  -1.814   1.276   3.284  12.318 
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -6.4614    12.3524  -0.523  0.60150    
+I(log(ppgdp))    13.9592     2.9961   4.659 5.85e-06 ***
+I(log(ppgdp)^2)  -0.5320     0.1774  -2.998  0.00307 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 6.321 on 196 degrees of freedom
+Multiple R-squared:  0.6141,    Adjusted R-squared:  0.6101 
+F-statistic: 155.9 on 2 and 196 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="splines" class="level2">
+<h2 class="anchored" data-anchor-id="splines">Splines</h2>
+<p>Un polinomio global tiene un problema: cada coeficiente afecta a toda la curva, así que lo que pasa en un extremo de los datos termina influyendo en el otro. Los <strong>splines</strong> resuelven esto partiendo el eje <span class="math inline">x</span> en tramos, separados por puntos llamados <strong>knots</strong> (nodos), y ajustando un polinomio de grado <span class="math inline">d</span> en cada tramo. Los polinomios se pegan de forma suave en cada knot: son continuos y tienen derivadas continuas hasta el orden <span class="math inline">d-1</span>.</p>
+<p>En R esto se hace con <code>bs()</code> del paquete <code>splines</code>, donde controlamos dos cosas:</p>
+<ul>
+<li><code>degree</code>: el grado del polinomio en cada tramo (<span class="math inline">d = 1</span> da rectas por tramos, <span class="math inline">d = 3</span> da splines cúbicos).</li>
+<li><code>knots</code>: dónde se corta el eje <span class="math inline">x</span>.</li>
+</ul>
+<p>Veamos cómo cambia el ajuste al mover estos dos parámetros:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-splines" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-splines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-splines-1.png" class="img-fluid figure-img" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-splines-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Ajuste de splines para lifeExpF según log(ppgdp) con distintos grados y knots. Las líneas punteadas marcan la ubicación de los knots.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Algunas observaciones:</p>
+<ul>
+<li><strong>Sin knots</strong> el spline cúbico es simplemente un polinomio de grado 3 sobre todo el rango: una sola curva global.</li>
+<li><strong>Grado 1 con 2 knots</strong> da tres rectas unidas en <span class="math inline">x = 8</span> y <span class="math inline">x = 10</span>. La curva es continua, pero tiene “codos” en los knots porque la pendiente cambia de golpe.</li>
+<li><strong>Grado 3 con 2 knots</strong> mantiene la flexibilidad por tramos, pero la unión es suave: no se ven los cortes.</li>
+<li><strong>Grado 3 con 4 knots</strong> es aún más flexible. Más knots significa más parámetros (el modelo usa <span class="math inline">d + K</span> columnas más el intercepto, con <span class="math inline">K</span> el número de knots), lo que permite seguir mejor los datos, pero también aumenta el riesgo de sobreajuste.</li>
+</ul>
+<p>En general, podemos aramr un spline cúbico como : <span class="math display">
+f(x) = \underbrace{\beta_0 + \beta_1 x + \beta_2x^2 + \beta_3x^3}_{\text{polinomio grado 3}}+ \sum_{j=1}^k \gamma_j(x - \xi_j)^3_+
+</span></p>
+<p>Notemos que la primera parte la concemos, es la segunda la que nos podria causar confusión.</p>
+<ul>
+<li><span class="math inline">k</span> : número de knots/nodos.</li>
+<li><span class="math inline">\xi_j</span> : ubicación del knot <span class="math inline">j</span>.</li>
+<li><span class="math inline">(x - \xi_j)^3_+</span> : es una función que vale 0 si <span class="math inline">x &lt; \xi_j</span> y <span class="math inline">(x - \xi_j)^3</span> si <span class="math inline">x \geq \xi_j</span>. Esto asegura que el efecto de cada knot solo se aplique a la derecha de su ubicación, y no afecte a los valores de <span class="math inline">x</span> menores que el knot.</li>
+<li><span class="math inline">\gamma_j</span> : coeficiente que determina la magnitud del efecto del knot <span class="math inline">j</span>.</li>
+</ul>
+<section id="smooth-splines" class="level5">
+<h5 class="anchored" data-anchor-id="smooth-splines">smooth splines</h5>
+<p>en este escenario, además de los splines, buscamos que la función sea suave. Esto es: una curva podría pasar muy cerca de todos los puntos observados, pero seguir demasiado de cerca cada fluctuación puede significar que está capturando ruido en lugar de un patrón general.</p>
+<p>La diferencia entre splines cúbicos y splines suavizados es, principalmente, cómo se controla esa flexibilidad: en el primer caso se especifican nudos; en el segundo se controla la suavidad global de la curva [generalmente con el parámetro <span class="math inline">\lambda</span>].</p>
+<hr>
+</section>
+</section>
+<section id="pca" class="level2">
+<h2 class="anchored" data-anchor-id="pca">PCA</h2>
+<p>Este es un escenario distinto al que veníamos trabajando. Consideremos que ahora, nuestro problema no es cómo ajustar los regresores que tenemos a una variable respuesta, pero <strong>elegir cuales regresores utilizar</strong>. Esto implica que tenemos demasiados y no sabemos cuales son verdaderamente relevantes. Considere que tenemos <span class="math display">
+X_1, X_2, \ldots, X_p
+</span></p>
+<p>Si muchos, que es lo más probable, de estos predictores están relacionados entre sí, tenemos el problema de la <strong>multicolinealidad</strong>. Cuando esto ocurre, resulta más difícil entender y separar los efectos individuales de cada predictor. Lo que implica menor precisión en la estimación de los coeficientes de regresión y eventualmente interpretaciones engañosas.</p>
+<p>De ahí nace la idea de utilizar <strong>PCA</strong> [analisis de componentes principales]. Para entender esto, vale la pena recordar de dónde viene y con qué se relaciona esto.\ Esta técnica nace desde el <em>algebra lineal</em>, donde si vivimos en un espacio de dimensión <span class="math inline">p</span>, tenemos la implicancia de que ese espacio se origina de <span class="math inline">p</span> vectores linealmente independientes [es decir, no puedo construir ninguno de esos <span class="math inline">p</span> vectores a partir de cualquier otro]. Lo que conlleva a llamar a estos vectores como una <strong>base</strong> del espacio [nos permiten construir cualquier otro vector de este espacio]. La manera de construir un vector es a partir de una combinación lineal de estos:</p>
+<p><span class="math display">
+v = \alpha_1 v_1 + \alpha_2 v_2 + \ldots + \alpha_p v_p \qquad \alpha_i \in \mathbb{R}
+</span></p>
+<p>Lo importante acá es que un mismo espacio tiene <strong>infinitas bases</strong>. La más conocida es la base canónica [en <span class="math inline">\mathbb{R}^2</span> son <span class="math inline">e_1 = (1,0)</span> y <span class="math inline">e_2 = (0,1)</span>], pero cualquier otro par de vectores linealmente independientes también genera todo el plano. Cambiar de base no cambia los puntos, solo cambia las coordenadas con las que los describimos.</p>
+<p>Llevemos esto a nuestro problema. Cada observación es un vector en <span class="math inline">\mathbb{R}^p</span> y, por defecto, la describimos en la base “natural” de nuestras variables: una coordenada para <span class="math inline">X_1</span>, otra para <span class="math inline">X_2</span>, etc. Pero si las variables están correlacionadas, esta base no es muy eficiente: varias coordenadas están contando la misma historia. La pregunta que se hace PCA es entonces:</p>
+<blockquote class="blockquote">
+<p>¿Existe otra base del mismo espacio, en la que las nuevas coordenadas no estén correlacionadas entre sí y en la que unas pocas direcciones concentren casi toda la información?</p>
+</blockquote>
+<section id="construyendo-la-nueva-base" class="level3">
+<h3 class="anchored" data-anchor-id="construyendo-la-nueva-base">Construyendo la nueva base</h3>
+<p>En PCA, “información” se entiende como <strong>varianza</strong>: una dirección en la que los datos casi no varían no nos ayuda a distinguir una observación de otra. Así que construimos la base dirección por dirección.</p>
+<p>La primera componente principal es una combinación lineal de los predictores [igual que el vector <span class="math inline">v</span> de arriba, pero ahora los <span class="math inline">\alpha_i</span> son los que tenemos que encontrar]: <span class="math display">
+Z_1 = \phi_{11}X_1 + \phi_{21}X_2 + \ldots + \phi_{p1}X_p
+</span></p>
+<p>Elegimos los pesos <span class="math inline">\phi_1 = (\phi_{11}, \ldots, \phi_{p1})</span> de modo que <span class="math inline">Z_1</span> tenga la <strong>mayor varianza posible</strong>, pidiendo <span class="math inline">\|\phi_1\| = 1</span> [si no, bastaría con agrandar los pesos para inflar la varianza todo lo que queramos]. Es decir: <span class="math display">
+\phi_1 = \arg\max_{\|\phi\| = 1} \text{Var}(\phi^\top X) = \arg\max_{\|\phi\| = 1} \phi^\top \Sigma\, \phi
+</span></p>
+<p>donde <span class="math inline">\Sigma</span> es la matriz de covarianza de <span class="math inline">X = (X_1, \ldots, X_p)</span>.</p>
+<p>La segunda componente <span class="math inline">Z_2</span> se construye igual, pero con una restricción extra: su dirección <span class="math inline">\phi_2</span> tiene que ser <strong>ortogonal</strong> a <span class="math inline">\phi_1</span>. Y así sucesivamente: <span class="math inline">Z_m</span> es la dirección de máxima varianza entre todas las que son ortogonales a las <span class="math inline">m-1</span> anteriores. Al final obtenemos <span class="math inline">p</span> vectores ortonormales <span class="math inline">\phi_1, \ldots, \phi_p</span>, es decir, <strong>una nueva base de <span class="math inline">\mathbb{R}^p</span></strong>.</p>
+</section>
+<section id="reducir-la-dimensión" class="level3">
+<h3 class="anchored" data-anchor-id="reducir-la-dimensión">Reducir la dimensión</h3>
+<p>Hasta acá solo cambiamos de base: con las <span class="math inline">p</span> componentes describimos exactamente lo mismo que con las <span class="math inline">p</span> variables originales. La gracia está en que, como ordenamos las componentes por varianza, podemos quedarnos con las primeras <span class="math inline">M &lt; p</span> y perder poca información. Cuánta información conservamos lo mide la <strong>proporción de varianza explicada</strong>: <span class="math display">
+\text{PVE}_m = \frac{\lambda_m}{\lambda_1 + \lambda_2 + \ldots + \lambda_p}
+</span></p>
+<p>Si las primeras <span class="math inline">M</span> componentes acumulan, digamos, un 90% de la varianza, el resto aporta poco y lo podemos descartar.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>PCA depende de la escala de las variables. Si una variable se mide en miles y otra en unidades, la primera va a dominar la varianza solo por sus unidades. Por eso, en general, <strong>estandarizamos</strong> cada <span class="math inline">X_j</span> antes de aplicar PCA [media 0 y varianza 1], lo que equivale a trabajar con la matriz de correlación en lugar de la de covarianza.</p>
+<p><em>ademas</em> Hay una precaución importante: PCA maximiza la variabilidad explicada de los predictores (X), no necesariamente su capacidad de predecir (Y). Por eso, retener las componentes que explican más variación no garantiza automáticamente que sean las mejores para una tarea predictiva.</p>
+</div>
+</div>
+</section>
+<section id="volviendo-a-weisberg" class="level3">
+<h3 class="anchored" data-anchor-id="volviendo-a-weisberg">Volviendo a Weisberg</h3>
+<p>Usemos tres predictores de <code>UN11</code> que, intuitivamente, miden algo parecido: la fertilidad, <span class="math inline">\log(\text{PIB per cápita})</span> y el porcentaje de población urbana. Veamos sus correlaciones:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">with</span>(UN11, <span class="fu">cbind</span>(fertility, <span class="at">log_ppgdp =</span> <span class="fu">log</span>(ppgdp), pctUrban))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(X), <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          fertility log_ppgdp pctUrban
+fertility      1.00     -0.72    -0.54
+log_ppgdp     -0.72      1.00     0.75
+pctUrban      -0.54      0.75     1.00</code></pre>
+</div>
+</div>
+<p>Las tres están bastante correlacionadas entre sí [en valor absoluto, entre 0.54 y 0.75]. Si ajustamos la regresión con las tres:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>modelo_5 <span class="ot">&lt;-</span> <span class="fu">lm</span>(lifeExpF <span class="sc">~</span> fertility <span class="sc">+</span> <span class="fu">log</span>(ppgdp) <span class="sc">+</span> pctUrban, <span class="at">data =</span> UN11)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(modelo_5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ver output">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ver output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = lifeExpF ~ fertility + log(ppgdp) + pctUrban, data = UN11)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-22.6165  -1.6683   0.5406   2.6425  11.2263 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 64.21764    3.84281  16.711  &lt; 2e-16 ***
+fertility   -4.19652    0.39396 -10.652  &lt; 2e-16 ***
+log(ppgdp)   2.17842    0.42888   5.079 8.83e-07 ***
+pctUrban     0.02116    0.02353   0.900    0.369    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.145 on 195 degrees of freedom
+Multiple R-squared:  0.7456,    Adjusted R-squared:  0.7417 
+F-statistic: 190.5 on 3 and 195 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Notemos que <code>pctUrban</code> sale no significativa [<span class="math inline">p \approx 0.37</span>], aunque por sí sola sí está asociada a la esperanza de vida. No es que no importe, sino que lo que aporta ya lo están contando las otras dos variables. Este es el síntoma de la multicolinealidad del que hablábamos.</p>
+<p>Apliquemos PCA con <code>prcomp()</code>, estandarizando con <code>scale. = TRUE</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pca <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X, <span class="at">scale. =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pca)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Importance of components:
+                          PC1    PC2     PC3
+Standard deviation     1.5315 0.6766 0.44349
+Proportion of Variance 0.7818 0.1526 0.06556
+Cumulative Proportion  0.7818 0.9344 1.00000</code></pre>
+</div>
+</div>
+<p>La primera componente sola explica un 78% de la varianza de los tres predictores, y con dos llegamos al 93%. Veamos ahora los pesos <span class="math inline">\phi</span> de cada componente [en R se llaman <code>rotation</code>, porque cambiar de base ortonormal es, literalmente, rotar los ejes]:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(pca<span class="sc">$</span>rotation, <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            PC1   PC2   PC3
+fertility -0.56 -0.73  0.39
+log_ppgdp  0.61 -0.04  0.79
+pctUrban   0.56 -0.68 -0.47</code></pre>
+</div>
+</div>
+<p>Esto nos permite interpretar las componentes:</p>
+<ul>
+<li><strong>PC1</strong> pesa las tres variables con magnitud similar: negativo en fertilidad y positivo en PIB y urbanización. La podemos leer como un índice de <strong>“desarrollo”</strong>: valores altos corresponden a países ricos, urbanos y con baja fertilidad.</li>
+<li><strong>PC2</strong> contrapone principalmente fertilidad y urbanización, casi sin mirar el PIB. Captura países que se salen del patrón general [por ejemplo, con fertilidad baja pero poca población urbana].</li>
+<li><strong>PC3</strong> concentra solo un 7% de la varianza, así que casi no aporta información.</li>
+</ul>
+<div id="fig-pca" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-pca" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-pca-1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-pca-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-pca-1.png" class="img-fluid figure-img" data-ref-parent="fig-pca" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-pca-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Proporción de varianza explicada (barras) y acumulada (línea).
+</figcaption>
+</figure>
+</div>
+</div>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-pca" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-pca-2" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-pca-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-pca-2.png" class="img-fluid figure-img" data-ref-parent="fig-pca" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-pca-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Países en las dos primeras componentes, coloreados por grupo.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-pca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: PCA sobre fertility, log(ppgdp) y pctUrban.
+</figcaption>
+</figure>
+</div>
+<p>Fijémonos en el gráfico de la derecha: sin haberle dicho nada sobre los grupos, PC1 separa casi por sí sola a los países africanos [a la izquierda] de los de la OCDE [a la derecha]. Eso refuerza la lectura de PC1 como un eje de desarrollo.</p>
+</section>
+</section>
+<section id="cerrando" class="level2">
+<h2 class="anchored" data-anchor-id="cerrando">Cerrando</h2>
+<div id="tbl-resumen" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resumen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Resumen de estrategias para análisis de regresión
+</figcaption>
+<div aria-describedby="tbl-resumen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Problema</th>
+<th style="text-align: center;">Estrategia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Comparar grupos controlando por un predictor</td>
+<td style="text-align: center;">Regresión con variables indicadoras, regresión con interacción</td>
+</tr>
+<tr class="even">
+<td>Modelar relaciones no lineales</td>
+<td style="text-align: center;">Regresión polinomial, splines</td>
+</tr>
+<tr class="odd">
+<td>Mucha información en los predictores, multicolinealidad</td>
+<td style="text-align: center;">PCA para reducir la dimensión y eliminar redundancia</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
