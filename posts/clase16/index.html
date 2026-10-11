@@ -204,10 +204,26 @@ window.Quarto = {
 <p>En esta clase vamos a trabajar con un ejemplo de Weisberg, en donde se plantea el siguiente modelo: <span class="math display">
 Y_i = \beta_0 + \beta_1 x_i + \epsilon_i
 </span></p>
-<p>Donde: - <span class="math inline">Y_i</span> es la esperanza de vida femenina del pais <span class="math inline">i</span>. - <span class="math inline">x_i</span> es <span class="math inline">\log(\text{PIB per cápita})</span> del país <span class="math inline">i</span>. - <span class="math inline">\beta_0</span> es la intercepto. - <span class="math inline">\beta_1</span> es la pendiente. - <span class="math inline">\epsilon_i</span> es el error aleatorio [parte del modelo que no logra explicar a <span class="math inline">Y_i</span>].</p>
-<p>De esto podemos preguntarnos dos cosas: (1) ¿la relación entre PIB y esperanza de vida es la misma para todos los grupos de países? (2) ¿La relación tiene que ser una recta o podría ser una curva?</p>
+<p>Donde:</p>
+<ul>
+<li><span class="math inline">Y_i</span> es la esperanza de vida femenina del pais <span class="math inline">i</span>.</li>
+<li><span class="math inline">x_i</span> es <span class="math inline">\log(\text{PIB per cápita})</span> del país <span class="math inline">i</span>.</li>
+<li><span class="math inline">\beta_0</span> es la intercepto.</li>
+<li><span class="math inline">\beta_1</span> es la pendiente.</li>
+<li><span class="math inline">\epsilon_i</span> es el error aleatorio [parte del modelo que no logra explicar a <span class="math inline">Y_i</span>].</li>
+</ul>
+<p>De esto podemos preguntarnos dos cosas:</p>
+<ol type="1">
+<li>¿la relación entre PIB y esperanza de vida es la misma para todos los grupos de países?</li>
+<li>¿La relación tiene que ser una recta o podría ser una curva?</li>
+</ol>
 <p><em>nota: el dataset clasifica a los países en 3 grupos: aquellos que pertenecen a la OCDE, otros, y aquellos que pertenecen a África.</em></p>
-<p>Notemos que si queremos evaluar el modelo para un grupo especifico, no podemos evaluarlo para otro, es decir, considere las siguientes representaciones: - <span class="math inline">U_1=</span> 1 sí el país pertenece a la OCDE, 0 en caso contrario. - <span class="math inline">U_2=</span> 1 sí el país pertenece a África, 0 en caso contrario. - <span class="math inline">U_3=</span> 1 sí el país pertenece a otros, 0 en caso contrario.</p>
+<p>Notemos que si queremos evaluar el modelo para un grupo especifico, no podemos evaluarlo para otro, es decir, considere las siguientes representaciones:</p>
+<ul>
+<li><span class="math inline">U_1=</span> 1 sí el país pertenece a la OCDE, 0 en caso contrario.</li>
+<li><span class="math inline">U_2=</span> 1 sí el país pertenece a África, 0 en caso contrario.</li>
+<li><span class="math inline">U_3=</span> 1 sí el país pertenece a otros, 0 en caso contrario.</li>
+</ul>
 <p>Esto implica que <span class="math inline">U_1 + U_2 + U_3 = 1</span> para cualquier fila. Meter esto dentro del modelo puede ser enredado, así que en primer lugar, fijemos los datos en alguno de los grupos y hacemos una regresión sobre este asi: <span class="math display">
 \begin{align}
 \mathbb{E}(Y| x, oecd) = \gamma_{0,oecd} + \gamma_{1,oecd}x \\
@@ -219,6 +235,42 @@ Y_i = \beta_0 + \beta_1 x_i + \epsilon_i
 <p>De manera más compacta y llamando <span class="math inline">j</span> al grupo, podemos escribir: <span class="math display">
 \mathbb{E}(Y| x, j) = \gamma_{0,j} + \gamma_{1,j}x
 </span></p>
+<p>Ahora, notemos que para describir la pertenencia a un grupo, basta solo con usar dos de las variables indicadoras, ya que la tercera se deduce de las otras dos, así:</p>
+<div id="tbl-params" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-params-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Parámetros por grupo
+</figcaption>
+<div aria-describedby="tbl-params-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Grupo</th>
+<th style="text-align: center;"><span class="math inline">U_2</span></th>
+<th style="text-align: center;"><span class="math inline">U_3</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>OCDE</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td>África</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td>Otros</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 
 
 
