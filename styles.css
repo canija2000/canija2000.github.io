@@ -1,1 +1,39 @@
 /* css styles */
+
+/* Incisos de ejercicios: (a), (b), ... */
+.inciso > h4, h4.inciso {
+  margin-top: 2.25rem;
+  font-weight: 600;
+}
+
+/* Desarrollo plegable: neutro, sin el azul del callout */
+.callout.desarrollo {
+  border-left-color: var(--bs-gray-400) !important;
+  margin-top: 0.75rem;
+}
+.callout.desarrollo .callout-header {
+  background-color: transparent !important;
+}
+.callout.desarrollo .callout-title-container {
+  color: var(--bs-gray-600);
+  font-weight: 500;
+}
+
+/* Mermaid: tamaño contenido y centrado */
+svg.flowchart {
+  display: block;
+  max-width: 380px;
+  height: auto;
+  margin: 0.5rem auto 1rem;
+}
+
+/* Mermaid: etiquetas de aristas con el color de fondo de la página (sin cuadrado gris) */
+svg.flowchart .edgeLabel,
+svg.flowchart .edgeLabel p,
+svg.flowchart .labelBkg {
+  background-color: var(--bs-body-bg) !important;
+}
+svg.flowchart .edgeLabel rect {
+  fill: transparent !important;
+  opacity: 0 !important;
+}

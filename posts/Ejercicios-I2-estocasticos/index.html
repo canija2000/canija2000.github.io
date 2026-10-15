@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Joaquín Bächler">
+<meta name="dcterms.date" content="2026-10-12">
+
+<title>Ejercicios I2 procesos estocasticos – om</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-445b8638c3d06994fee0907d791121c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>
+
+      .quarto-title-block .quarto-title-banner {
+        background-image: url(portada.jpg);
+background-size: cover;
+      }
+</style>
+<script src="../../site_libs/quarto-diagram/mermaid-postprocess-shim.js"></script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">om</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/canija2000"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Ejercicios I2 procesos estocasticos</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">probabilidad</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Joaquín Bächler </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 12, 2026</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p>El enunciado completo está disponible aquí: <a href="Ejercicios4.pdf">Ejercicios de repaso I2 (PDF)</a>.</p>
+<section id="ejercicio-1" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-1">Ejercicio 1</h3>
+<p>Considere la cadena de Markov homogénea con espacio de estados <span class="math inline">S = \{1, 2, 3, 4\}</span> y matriz de probabilidades de transición <span class="math display">
+P = \begin{pmatrix}
+0 &amp; 1 &amp; 0 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; 0 \\
+1/3 &amp; 0 &amp; 0 &amp; 2/3 \\
+0 &amp; 0 &amp; 1 &amp; 0
+\end{pmatrix}.
+</span></p>
+<p><strong>[a]</strong> Dibuje el diagrama de transición, determine las clases de comunicación e indique si la cadena es irreducible.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<svg id="mermaid-figure-1" width="672" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="flowchart" viewbox="0 0 219.734375 164.6953125" role="graphics-document document" aria-roledescription="flowchart-v2" height="480">
+<style>#mermaid-figure-1{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-figure-1 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-figure-1 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-figure-1 .error-icon{fill:#552222;}#mermaid-figure-1 .error-text{fill:#552222;stroke:#552222;}#mermaid-figure-1 .edge-thickness-normal{stroke-width:1px;}#mermaid-figure-1 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-figure-1 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-figure-1 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-figure-1 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-figure-1 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-figure-1 .marker{fill:#333333;stroke:#333333;}#mermaid-figure-1 .marker.cross{stroke:#333333;}#mermaid-figure-1 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-figure-1 p{margin:0;}#mermaid-figure-1 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-figure-1 .cluster-label text{fill:#333;}#mermaid-figure-1 .cluster-label span{color:#333;}#mermaid-figure-1 .cluster-label span p{background-color:transparent;}#mermaid-figure-1 .label text,#mermaid-figure-1 span{fill:#333;color:#333;}#mermaid-figure-1 .node rect,#mermaid-figure-1 .node circle,#mermaid-figure-1 .node ellipse,#mermaid-figure-1 .node polygon,#mermaid-figure-1 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-figure-1 .rough-node .label text,#mermaid-figure-1 .node .label text,#mermaid-figure-1 .image-shape .label,#mermaid-figure-1 .icon-shape .label{text-anchor:middle;}#mermaid-figure-1 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-figure-1 .rough-node .label,#mermaid-figure-1 .node .label,#mermaid-figure-1 .image-shape .label,#mermaid-figure-1 .icon-shape .label{text-align:center;}#mermaid-figure-1 .node.clickable{cursor:pointer;}#mermaid-figure-1 .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#mermaid-figure-1 .arrowheadPath{fill:#333333;}#mermaid-figure-1 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-figure-1 .flowchart-link{stroke:#333333;fill:none;}#mermaid-figure-1 .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-figure-1 .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-figure-1 .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaid-figure-1 .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#mermaid-figure-1 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-figure-1 .cluster text{fill:#333;}#mermaid-figure-1 .cluster span{color:#333;}#mermaid-figure-1 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-figure-1 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-figure-1 rect.text{fill:none;stroke-width:0;}#mermaid-figure-1 .icon-shape,#mermaid-figure-1 .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-figure-1 .icon-shape p,#mermaid-figure-1 .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#mermaid-figure-1 .icon-shape rect,#mermaid-figure-1 .image-shape rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaid-figure-1 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-figure-1 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-figure-1 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style>
+<g><marker id="mermaid-1792085838799_flowchart-v2-pointEnd" class="marker flowchart-v2" viewbox="0 0 10 10" refx="5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-pointStart" class="marker flowchart-v2" viewbox="0 0 10 10" refx="4.5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-circleEnd" class="marker flowchart-v2" viewbox="0 0 10 10" refx="11" refy="5" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-1792085838799_flowchart-v2-circleStart" class="marker flowchart-v2" viewbox="0 0 10 10" refx="-1" refy="5" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-1792085838799_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewbox="0 0 11 11" refx="12" refy="5.2" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewbox="0 0 11 11" refx="-1" refy="5.2" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M128.557,36.459L133.656,33.716C138.754,30.973,148.951,25.486,158.561,25.17C168.171,24.855,177.194,29.709,181.706,32.136L186.217,34.564" id="L_1_2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_1_2_0" data-points="W3sieCI6MTI4LjU1NzA5MjExMjA3MjE4LCJ5IjozNi40NTg3NzUwNTAxMzQ2NH0seyJ4IjoxNTkuMTQ4NDM3NSwieSI6MjB9LHsieCI6MTg5LjczOTc4Mjg4NzkyNzgyLCJ5IjozNi40NTg3NzUwNTAxMzQ2NH1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M189.74,47.541L184.641,50.284C179.543,53.027,169.346,58.514,159.736,58.83C150.125,59.145,141.103,54.291,136.591,51.864L132.08,49.436" id="L_2_1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_2_1_0" data-points="W3sieCI6MTg5LjczOTc4Mjg4NzkyNzgyLCJ5Ijo0Ny41NDEyMjQ5NDk4NjUzNn0seyJ4IjoxNTkuMTQ4NDM3NSwieSI6NjR9LHsieCI6MTI4LjU1NzA5MjExMjA3MjE4LCJ5Ijo0Ny41NDEyMjQ5NDk4NjUzNn1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M27.216,91.738L34.176,83.449C41.136,75.159,55.056,58.579,67.614,50.29C80.172,42,91.367,42,96.965,42L102.563,42" id="L_3_1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_3_1_0" data-points="W3sieCI6MjcuMjE1NjAzNzI2MzkzMjEyLCJ5Ijo5MS43Mzg0NDA1OTM4NjYxN30seyJ4Ijo2OC45NzY1NjI1LCJ5Ijo0Mn0seyJ4IjoxMDYuNTYyNSwieSI6NDJ9XQ==" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M31.391,100.695L37.655,100.695C43.919,100.695,56.448,100.695,68.537,103.296C80.626,105.896,92.276,111.097,98.101,113.697L103.926,116.297" id="L_3_4_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_3_4_0" data-points="W3sieCI6MzEuMzkwNjI1LCJ5IjoxMDAuNjk1MzEyNX0seyJ4Ijo2OC45NzY1NjI1LCJ5IjoxMDAuNjk1MzEyNX0seyJ4IjoxMDcuNTc4MzM0NTk1MDE0MzgsInkiOjExNy45Mjc4MDkzNjQyMjk2M31d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M107.578,127.463L101.145,130.335C94.711,133.207,81.844,138.951,69.148,136.232C56.452,133.513,43.928,122.331,37.665,116.74L31.403,111.148" id="L_4_3_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_4_3_0" data-points="W3sieCI6MTA3LjU3ODMzNDU5NTAxNDM4LCJ5IjoxMjcuNDYyODE1NjM1NzcwMzd9LHsieCI6NjguOTc2NTYyNSwieSI6MTQ0LjY5NTMxMjV9LHsieCI6MjguNDE5Mzg0NzEzNDc4ODUsInkiOjEwOC40ODQ0NjUxMTY3MjY4NH1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(159.1484375, 20)"><g class="label" data-id="L_1_2_0" transform="translate(-4.1953125, -12)"><foreignobject width="8.390625" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+1
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="edgeLabel" transform="translate(159.1484375, 64)"><g class="label" data-id="L_2_1_0" transform="translate(-4.1953125, -12)"><foreignobject width="8.390625" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+1
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="edgeLabel" transform="translate(68.9765625, 42)"><g class="label" data-id="L_3_1_0" transform="translate(-12.5859375, -12)"><foreignobject width="25.171875" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+1/3
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="edgeLabel" transform="translate(68.9765625, 100.6953125)"><g class="label" data-id="L_3_4_0" transform="translate(-12.5859375, -12)"><foreignobject width="25.171875" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+2/3
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="edgeLabel" transform="translate(68.9765625, 144.6953125)"><g class="label" data-id="L_4_3_0" transform="translate(-4.1953125, -12)"><foreignobject width="8.390625" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+1
+</p>
+</span>
+</div>
+</foreignobject></g></g></g><g class="nodes"><g class="node default" id="flowchart-1-0" transform="translate(118.2578125, 42)"><circle class="basic label-container" style="" r="11.6953125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-4.1953125, -12)"><rect></rect><foreignobject width="8.390625" height="24">
+<div data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="nodeLabel">
+<p>
+1
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="node default" id="flowchart-2-1" transform="translate(200.0390625, 42)"><circle class="basic label-container" style="" r="11.6953125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-4.1953125, -12)"><rect></rect><foreignobject width="8.390625" height="24">
+<div data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="nodeLabel">
+<p>
+2
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="node default" id="flowchart-3-4" transform="translate(19.6953125, 100.6953125)"><circle class="basic label-container" style="" r="11.6953125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-4.1953125, -12)"><rect></rect><foreignobject width="8.390625" height="24">
+<div data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="nodeLabel">
+<p>
+3
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="node default" id="flowchart-4-7" transform="translate(118.2578125, 122.6953125)"><circle class="basic label-container" style="" r="11.6953125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-4.1953125, -12)"><rect></rect><foreignobject width="8.390625" height="24">
+<div data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="nodeLabel">
+<p>
+4
+</p>
+</span>
+</div>
+</foreignobject></g></g></g></g></g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Tenemos:</p>
+<ul>
+<li><span class="math inline">\text{clase}_1 = \{1, 2\} = C(1)</span> , además la clase es cerrada, ya que <span class="math inline">p_{12} = 1</span> y <span class="math inline">p_{21} = 1</span>.</li>
+<li><span class="math inline">\text{clase}_3 = \{3, 4\} = C(3)</span>, además la clase es transitoria, ya que <span class="math inline">p_{34} = 2/3</span> y <span class="math inline">p_{43} = 1</span>, pero <span class="math inline">p_{31} = 1/3</span> y <span class="math inline">p_{13} = 0</span>.</li>
+</ul>
+<p>Luego, dado que <span class="math inline">p_{13}(n) = 0 \quad \forall n</span>, la cadena <strong>no</strong> es irreducible.</p>
+</div>
+</div>
+</div>
+<p><strong>[b]</strong> Clasifique cada estado como recurrente o transitorio, y calcule el periodo de cada clase.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Para la <span class="math inline">\text{clase}_1 = C(1)</span>, observamos que <span class="math inline">f_{11}(2) = 1</span> y por lo tanto <span class="math inline">f_{22}(2) = 1</span> por propiedad de clase. Además, una clase cerrada y finita es recurrente.</p>
+<p>Para la <span class="math inline">\text{clase}_3 = C(3)</span>, es transitoria, ya que <span class="math display">
+\begin{aligned}
+f_{33} &amp;= p_{34}(1) \cdot p_{43}(1)  \\
+&amp;= \frac{2}{3} &lt; 1
+\end{aligned}
+</span></p>
+<p>De igual forma <span class="math inline">p_{11}(2n) = 1</span> y <span class="math inline">p_{33}(2n) = (2/3)^n</span>. Además, los periodos son <span class="math inline">d(1) = 2</span> y <span class="math inline">d(3) = 2</span></p>
+</div>
+</div>
+</div>
+<p><strong>[c]</strong> Obtenga la distribución invariante y los tiempos medios de recurrencia de los estados recurrentes.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Buscamos <span class="math inline">\pi</span> tal que <span class="math inline">\pi P = \pi</span>: <span class="math display">
+(\pi_1, \pi_2, \pi_3, \pi_4)
+\begin{pmatrix}
+0 &amp; 1 &amp; 0 &amp; 0 \\
+1 &amp; 0 &amp; 0 &amp; 0 \\
+1/3 &amp; 0 &amp; 0 &amp; 2/3 \\
+0 &amp; 0 &amp; 1 &amp; 0
+\end{pmatrix}
+= (\pi_1, \pi_2, \pi_3, \pi_4)
+</span></p>
+<p>Lo que nos entrega el sistema:</p>
+<p><span class="math display">
+\begin{aligned}
+\text{(i)} \quad &amp; \pi_2 + \tfrac{\pi_3}{3} = \pi_1 \\
+\text{(ii)} \quad &amp; \pi_1 = \pi_2 \\
+\text{(iii)} \quad &amp; \pi_4 = \pi_3 \\
+\text{(iv)} \quad &amp; \tfrac{2}{3}\pi_3 = \pi_4 \\
+\text{(v)} \quad &amp; \pi_1 + \pi_2 + \pi_3 + \pi_4 = 1
+\end{aligned}
+</span></p>
+<p>De (iii) y (iv) se tiene <span class="math inline">\pi_3 = \pi_4 = 0</span>. Luego <span class="math inline">\pi_1 + \pi_2 = 1</span> y <span class="math inline">\pi_1 = \pi_2</span>, por lo que <span class="math display">
+\pi = \left(\tfrac{1}{2}, \tfrac{1}{2}, 0, 0\right).
+</span></p>
+<p>Lo cual hace sentido, porque <span class="math inline">C(1)</span> absorbe eventualmente a la cadena.</p>
+<p>Luego, por definición, <span class="math display">
+\mu_j = \frac{1}{\pi_j} \quad \Longrightarrow \quad \mu_1 = \frac{1}{1/2} = 2 = \mu_2.
+</span></p>
+</div>
+</div>
+</div>
+<p><strong>[d]</strong> Muestre que <span class="math inline">p_{11}(2n) = 1</span> y <span class="math inline">p_{11}(2n+1) = 0</span> para todo <span class="math inline">n \geq 0</span>. Explique por qué esto no contradice la parte (c), es decir, por qué el teorema de convergencia no es aplicable a pesar de que la distribución invariante existe.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Para todo <span class="math inline">n \in \mathbb{N}</span>, <span class="math inline">n \geq 0</span>, buscamos que <span class="math display">
+p_{11}(2n) = 1 \quad := \text{“en dos pasos siempre estamos en 1”}.
+</span></p>
+<p>Vemos que, <span class="math inline">p_{12} = 1</span> y <span class="math inline">p_{21}=1</span> . Si partimos de <span class="math inline">1</span> siempre volveremos en 2 pasos. De manera que <span class="math inline">p_{11}(2n) = 1</span> y en cada instante impar estaremos en <span class="math inline">2</span>, se sigue que <span class="math inline">p_{11}(2n+1) = 0</span>.</p>
+<p>El teorema de convergenica no aplica ya que <span class="math inline">p_{12} = 1</span> y <span class="math inline">p_{21} = 1</span>, es decir, es un estado oscilante, que <strong>solo en los pares retorna</strong>. Formalmente, no es una cadena aperiodica, y por lo tanto no cumple con los requisitos.</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="ejercicio-2." class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-2.">Ejercicio 2.</h3>
+<p>Una mesa de ayuda recibe consultas telefónicas según un proceso de Poisson <span class="math inline">\{N_t^{(1)}\}</span> de parametro <span class="math inline">\lambda_1=4</span> por hora y consultas por chat según un proceso de Poisson <span class="math inline">\{N_t^{(2)}\}</span> de parámetro <span class="math inline">\lambda_2=6</span> por hora, ambos independientes. Sean <span class="math inline">T_1</span> y <span class="math inline">T_2</span> los instantes de la primera consulta de cada tipo y sea <span class="math inline">T=\min(T_1, T_2)</span>.</p>
+<p><strong>[a]</strong> Identifique, por superposición, la distribución del número total de consultas recibidas en media hora y calcule la probabilidad de que se reciban al menos tres.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Llamemos <span class="math inline">M_t</span> a la variable aleatoria que cuenta el número total de consultas recibidas en el intervalo <span class="math inline">[0, t]</span>. Por superposición, <span class="math inline">M_t = N_t^{(1)} + N_t^{(2)}</span> es un proceso de Poisson con parámetro <span class="math inline">\lambda = \lambda_1 + \lambda_2 = 4 + 6 = 10</span> por hora.</p>
+<p>En particular <span class="math inline">M_{0.5} \sim Poisson(5)</span>. \ Ahora, la probabilidad de que se reciban al menos tres consultas en media hora corresponde a: <span class="math display">
+\begin{aligned}
+P(M_{0.5} \ge 3) &amp;= 1 - P(M_{0.5} &lt; 3) = 1 - P(M_{0.5} = 0) - P(M_{0.5} = 1) - P(M_{0.5} = 2)\\
+&amp;= 1 - e^{-5} \left( \frac{5^0}{0!} + \frac{5^1}{1!} + \frac{5^2}{2!} \right) = 1 - e^{-5} \left( 1 + 5 + 12.5 \right)\\
+&amp;= 1 - e^{-5} \cdot 18.5 \approx 0.9596.
+\end{aligned}
+</span></p>
+</div>
+</div>
+</div>
+<p><strong>[b]</strong> Usando la independencia de ambos procesos, calcule la probabilidad de que en una hora se reciban exactamente dos consultas telefónicas y exactamente tres por chat.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Dado que <span class="math inline">N_1^{(1)} \sim Poisson(4)</span> y <span class="math inline">N_1^{(2)} \sim Poisson(6)</span>, y que ambos procesos son independientes, tenemos: <span class="math display">
+\begin{aligned}
+P(N_1^{(1)} = 2 \text{ y } N_1^{(2)} = 3) &amp;= P(N_1^{(1)} = 2) \cdot P(N_1^{(2)} = 3) \\
+&amp;= \frac{4^2 e^{-4}}{2!} \cdot \frac{6^3 e^{-6}}{3!} \\
+&amp;= \frac{16 e^{-4}}{2} \cdot \frac{216 e^{-6}}{6} \\
+&amp;= 8 e^{-4} \cdot 36 e^{-6} \
+&amp;= 288 e^{-10} \approx 0.0131.
+\end{aligned}
+</span></p>
+</div>
+</div>
+</div>
+<p><strong>[c]</strong> Escriba la densidad conjunta del vector <span class="math inline">(T_1, T_2)</span>. Muestre que <span class="math inline">T ∼ exp(\lambda_1 + \lambda_2)</span> y calcule <span class="math inline">E(T)</span> en minutos.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Veamos que <span class="math inline">T_1</span> y <span class="math inline">T_2</span> son independientes. Además, por definición de un proceso de Poisson, <span class="math inline">T_1 \sim exp(\lambda_1)</span> y <span class="math inline">T_2 \sim exp(\lambda_2)</span>. Por lo tanto, la densidad conjunta es: <span class="math display">
+f_{T_1, T_2}(t_1, t_2) = f_{T_1}(t_1) \cdot f_{T_2}(t_2) = \lambda_1 e^{-\lambda_1 t_1} \cdot \lambda_2 e^{-\lambda_2 t_2}, \quad t_1, t_2 \ge 0.
+</span></p>
+<p>Ahora, nos piden mostrar que <span class="math inline">T = \min(T_1, T_2) \sim exp(\lambda_1 + \lambda_2)</span>. Consideremos el momento <span class="math inline">t</span>, el momento de la primera consulta de cualquier tipo. La probabilidad de que <span class="math inline">T&gt;t</span> corresponde a que no haya llegado ninguna consulta de ningún tipo hasta el momento <span class="math inline">t</span>, es decir: <span class="math display">
+P(T &gt; t) = P(T_1 &gt; t \text{ y } T_2 &gt; t) = P(T_1 &gt; t) \cdot P(T_2 &gt; t) = e^{-\lambda_1 t} \cdot e^{-\lambda_2 t} = e^{-(\lambda_1 + \lambda_2) t}.
+</span> Recordemos que <span class="math inline">P(T &gt; t) = 1 - F_T(t)</span>, por lo que la función de distribución de <span class="math inline">T</span> es: <span class="math display">
+F_T(t) = 1 - e^{-(\lambda_1 + \lambda_2) t}, \quad t \ge 0,
+</span> y por lo tanto la densidad de <span class="math inline">T</span> es: <span class="math display">
+f_T(t) = (\lambda_1 + \lambda_2) e^{-(\lambda_1 + \lambda_2) t}, \quad t \ge 0,
+</span> lo que nos dice que <span class="math inline">T \sim exp(\lambda_1 + \lambda_2)</span>. Finalmente <span class="math inline">E(T)</span> = = = 6 .</p>
+</div>
+</div>
+</div>
+<p><strong>[d]</strong> Integrando la densidad conjunta sobre la región correspondiente, muestre que: <span class="math display">
+P(T&gt;t,T_1&lt;T_2) = \frac{\lambda_1}{\lambda_1+\lambda_2} e^{-(\lambda_1 + \lambda_2) t}, \quad t \ge 0.
+</span> Deduzca que <span class="math inline">P(T_1&lt;T_2) = \frac{\lambda_1}{\lambda_1+\lambda_2}</span> y que los eventos <span class="math inline">\{T&gt;t\} \text{ y } \{T_1 &lt; T_2\}</span> son indenpendientes. Interprete este último hecho.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Recordemos que la conjunta es <span class="math inline">f_{T_1,T_2}(t_1,t_2) = \lambda_1 e^{-\lambda_1 t_1} \cdot \lambda_2 e^{-\lambda_2 t_2}</span>. Además buscamos que se cumpla que <span class="math inline">\{t&lt; T_1 &lt; T_2 \}</span> , integrando esto corresponde a : <span class="math display">
+\begin{aligned}
+\int_{t}^{\infty} \int_{t_1}^{\infty} \lambda_1 e^{-\lambda_1 t_1}\lambda_2 e^{-\lambda_2 t_2} dt_2dt_1\\
+\int_{t}^{\infty} \lambda_1e^{-\lambda_1 t_1} \left[ -e^{-\lambda_2 t_2} \right]_{t_2=t_1}^{t_2=\infty} dt_1\\
+\int_{t}^{\infty} \lambda_1 e^{-\lambda_1 t_1}\cdot -e^{-\lambda_2 t_1} dt_1 = \lambda_1 \int_{t}^{\infty} -e^{-t_1(\lambda_1 + \lambda_2)}\\
+\lambda_1 \cdot\left(\frac{e^{-t(\lambda_1 +\lambda_2)}}{\lambda_1 + \lambda_2}\right)
+\end{aligned}
+</span></p>
+</div>
+</div>
+</div>
+<p>Que es exactamente lo que buscabamos. Ahora, veamos que en <em>[c]</em>, <span class="math inline">P(T&gt;t) = e^{-(\lambda_1 + \lambda_2) t}</span>, que es exactmente una parte de la expresión que obtuvimos. De ahí podemos inferir que, efectivamente, <span class="math inline">P(T_1 &lt; T_2) = \frac{\lambda_1}{\lambda_1 + \lambda_2}</span> y que los eventos <span class="math inline">\{T&gt;t\} \text{ y } \{T_1 &lt; T_2\}</span> son independientes.Esto tiene sentido en dos dimensiones: 1. Las densidades se multiplican 2. Notemos que el hecho de que la primera consulta llegue después de un tiempo <span class="math inline">t</span> no nos da información sobre si la primera consulta fue por teléfono o por chat.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/canija2000\.github\.io");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

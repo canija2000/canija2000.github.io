@@ -10,7 +10,275 @@
 <atom:link href="https://canija2000.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>A blog built with Quarto</description>
 <generator>quarto-1.10.19</generator>
-<lastBuildDate>Sat, 10 Oct 2026 03:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 12 Oct 2026 03:00:00 GMT</lastBuildDate>
+<item>
+  <title>Ejercicios I2 procesos estocasticos</title>
+  <dc:creator>Joaquín Bächler</dc:creator>
+  <link>https://canija2000.github.io/posts/Ejercicios-I2-estocasticos/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>El enunciado completo está disponible aquí: <a href="Ejercicios4.pdf">Ejercicios de repaso I2 (PDF)</a>.</p>
+<section id="ejercicio-1" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-1">Ejercicio 1</h3>
+<p>Considere la cadena de Markov homogénea con espacio de estados <img src="https://latex.codecogs.com/png.latex?S%20=%20%5C%7B1,%202,%203,%204%5C%7D"> y matriz de probabilidades de transición <img src="https://latex.codecogs.com/png.latex?%0AP%20=%20%5Cbegin%7Bpmatrix%7D%0A0%20&amp;%201%20&amp;%200%20&amp;%200%20%5C%5C%0A1%20&amp;%200%20&amp;%200%20&amp;%200%20%5C%5C%0A1/3%20&amp;%200%20&amp;%200%20&amp;%202/3%20%5C%5C%0A0%20&amp;%200%20&amp;%201%20&amp;%200%0A%5Cend%7Bpmatrix%7D.%0A"></p>
+<p><strong>[a]</strong> Dibuje el diagrama de transición, determine las clases de comunicación e indique si la cadena es irreducible.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<svg id="mermaid-figure-1" width="672" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="flowchart" viewbox="0 0 219.734375 164.6953125" aria-roledescription="flowchart-v2" height="480">
+<style>#mermaid-figure-1{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-figure-1 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-figure-1 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-figure-1 .error-icon{fill:#552222;}#mermaid-figure-1 .error-text{fill:#552222;stroke:#552222;}#mermaid-figure-1 .edge-thickness-normal{stroke-width:1px;}#mermaid-figure-1 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-figure-1 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-figure-1 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-figure-1 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-figure-1 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-figure-1 .marker{fill:#333333;stroke:#333333;}#mermaid-figure-1 .marker.cross{stroke:#333333;}#mermaid-figure-1 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-figure-1 p{margin:0;}#mermaid-figure-1 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-figure-1 .cluster-label text{fill:#333;}#mermaid-figure-1 .cluster-label span{color:#333;}#mermaid-figure-1 .cluster-label span p{background-color:transparent;}#mermaid-figure-1 .label text,#mermaid-figure-1 span{fill:#333;color:#333;}#mermaid-figure-1 .node rect,#mermaid-figure-1 .node circle,#mermaid-figure-1 .node ellipse,#mermaid-figure-1 .node polygon,#mermaid-figure-1 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-figure-1 .rough-node .label text,#mermaid-figure-1 .node .label text,#mermaid-figure-1 .image-shape .label,#mermaid-figure-1 .icon-shape .label{text-anchor:middle;}#mermaid-figure-1 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-figure-1 .rough-node .label,#mermaid-figure-1 .node .label,#mermaid-figure-1 .image-shape .label,#mermaid-figure-1 .icon-shape .label{text-align:center;}#mermaid-figure-1 .node.clickable{cursor:pointer;}#mermaid-figure-1 .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#mermaid-figure-1 .arrowheadPath{fill:#333333;}#mermaid-figure-1 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-figure-1 .flowchart-link{stroke:#333333;fill:none;}#mermaid-figure-1 .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-figure-1 .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-figure-1 .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaid-figure-1 .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#mermaid-figure-1 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-figure-1 .cluster text{fill:#333;}#mermaid-figure-1 .cluster span{color:#333;}#mermaid-figure-1 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-figure-1 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-figure-1 rect.text{fill:none;stroke-width:0;}#mermaid-figure-1 .icon-shape,#mermaid-figure-1 .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-figure-1 .icon-shape p,#mermaid-figure-1 .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#mermaid-figure-1 .icon-shape rect,#mermaid-figure-1 .image-shape rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaid-figure-1 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-figure-1 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-figure-1 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style>
+<g><marker id="mermaid-1792085838799_flowchart-v2-pointEnd" class="marker flowchart-v2" viewbox="0 0 10 10" refx="5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-pointStart" class="marker flowchart-v2" viewbox="0 0 10 10" refx="4.5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-circleEnd" class="marker flowchart-v2" viewbox="0 0 10 10" refx="11" refy="5" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-1792085838799_flowchart-v2-circleStart" class="marker flowchart-v2" viewbox="0 0 10 10" refx="-1" refy="5" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-1792085838799_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewbox="0 0 11 11" refx="12" refy="5.2" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewbox="0 0 11 11" refx="-1" refy="5.2" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M128.557,36.459L133.656,33.716C138.754,30.973,148.951,25.486,158.561,25.17C168.171,24.855,177.194,29.709,181.706,32.136L186.217,34.564" id="L_1_2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_1_2_0" data-points="W3sieCI6MTI4LjU1NzA5MjExMjA3MjE4LCJ5IjozNi40NTg3NzUwNTAxMzQ2NH0seyJ4IjoxNTkuMTQ4NDM3NSwieSI6MjB9LHsieCI6MTg5LjczOTc4Mjg4NzkyNzgyLCJ5IjozNi40NTg3NzUwNTAxMzQ2NH1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M189.74,47.541L184.641,50.284C179.543,53.027,169.346,58.514,159.736,58.83C150.125,59.145,141.103,54.291,136.591,51.864L132.08,49.436" id="L_2_1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_2_1_0" data-points="W3sieCI6MTg5LjczOTc4Mjg4NzkyNzgyLCJ5Ijo0Ny41NDEyMjQ5NDk4NjUzNn0seyJ4IjoxNTkuMTQ4NDM3NSwieSI6NjR9LHsieCI6MTI4LjU1NzA5MjExMjA3MjE4LCJ5Ijo0Ny41NDEyMjQ5NDk4NjUzNn1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M27.216,91.738L34.176,83.449C41.136,75.159,55.056,58.579,67.614,50.29C80.172,42,91.367,42,96.965,42L102.563,42" id="L_3_1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_3_1_0" data-points="W3sieCI6MjcuMjE1NjAzNzI2MzkzMjEyLCJ5Ijo5MS43Mzg0NDA1OTM4NjYxN30seyJ4Ijo2OC45NzY1NjI1LCJ5Ijo0Mn0seyJ4IjoxMDYuNTYyNSwieSI6NDJ9XQ==" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M31.391,100.695L37.655,100.695C43.919,100.695,56.448,100.695,68.537,103.296C80.626,105.896,92.276,111.097,98.101,113.697L103.926,116.297" id="L_3_4_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_3_4_0" data-points="W3sieCI6MzEuMzkwNjI1LCJ5IjoxMDAuNjk1MzEyNX0seyJ4Ijo2OC45NzY1NjI1LCJ5IjoxMDAuNjk1MzEyNX0seyJ4IjoxMDcuNTc4MzM0NTk1MDE0MzgsInkiOjExNy45Mjc4MDkzNjQyMjk2M31d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M107.578,127.463L101.145,130.335C94.711,133.207,81.844,138.951,69.148,136.232C56.452,133.513,43.928,122.331,37.665,116.74L31.403,111.148" id="L_4_3_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_4_3_0" data-points="W3sieCI6MTA3LjU3ODMzNDU5NTAxNDM4LCJ5IjoxMjcuNDYyODE1NjM1NzcwMzd9LHsieCI6NjguOTc2NTYyNSwieSI6MTQ0LjY5NTMxMjV9LHsieCI6MjguNDE5Mzg0NzEzNDc4ODUsInkiOjEwOC40ODQ0NjUxMTY3MjY4NH1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(159.1484375, 20)"><g class="label" data-id="L_1_2_0" transform="translate(-4.1953125, -12)"><foreignobject width="8.390625" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+1
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="edgeLabel" transform="translate(159.1484375, 64)"><g class="label" data-id="L_2_1_0" transform="translate(-4.1953125, -12)"><foreignobject width="8.390625" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+1
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="edgeLabel" transform="translate(68.9765625, 42)"><g class="label" data-id="L_3_1_0" transform="translate(-12.5859375, -12)"><foreignobject width="25.171875" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+1/3
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="edgeLabel" transform="translate(68.9765625, 100.6953125)"><g class="label" data-id="L_3_4_0" transform="translate(-12.5859375, -12)"><foreignobject width="25.171875" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+2/3
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="edgeLabel" transform="translate(68.9765625, 144.6953125)"><g class="label" data-id="L_4_3_0" transform="translate(-4.1953125, -12)"><foreignobject width="8.390625" height="24">
+<div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="edgeLabel">
+<p>
+1
+</p>
+</span>
+</div>
+</foreignobject></g></g></g><g class="nodes"><g class="node default" id="flowchart-1-0" transform="translate(118.2578125, 42)"><circle class="basic label-container" style="" r="11.6953125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-4.1953125, -12)"><rect></rect><foreignobject width="8.390625" height="24">
+<div data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="nodeLabel">
+<p>
+1
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="node default" id="flowchart-2-1" transform="translate(200.0390625, 42)"><circle class="basic label-container" style="" r="11.6953125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-4.1953125, -12)"><rect></rect><foreignobject width="8.390625" height="24">
+<div data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="nodeLabel">
+<p>
+2
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="node default" id="flowchart-3-4" transform="translate(19.6953125, 100.6953125)"><circle class="basic label-container" style="" r="11.6953125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-4.1953125, -12)"><rect></rect><foreignobject width="8.390625" height="24">
+<div data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="nodeLabel">
+<p>
+3
+</p>
+</span>
+</div>
+</foreignobject></g></g><g class="node default" id="flowchart-4-7" transform="translate(118.2578125, 122.6953125)"><circle class="basic label-container" style="" r="11.6953125" cx="0" cy="0"></circle><g class="label" style="" transform="translate(-4.1953125, -12)"><rect></rect><foreignobject width="8.390625" height="24">
+<div data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
+<span class="nodeLabel">
+<p>
+4
+</p>
+</span>
+</div>
+</foreignobject></g></g></g></g></g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>Tenemos:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctext%7Bclase%7D_1%20=%20%5C%7B1,%202%5C%7D%20=%20C(1)"> , además la clase es cerrada, ya que <img src="https://latex.codecogs.com/png.latex?p_%7B12%7D%20=%201"> y <img src="https://latex.codecogs.com/png.latex?p_%7B21%7D%20=%201">.</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctext%7Bclase%7D_3%20=%20%5C%7B3,%204%5C%7D%20=%20C(3)">, además la clase es transitoria, ya que <img src="https://latex.codecogs.com/png.latex?p_%7B34%7D%20=%202/3"> y <img src="https://latex.codecogs.com/png.latex?p_%7B43%7D%20=%201">, pero <img src="https://latex.codecogs.com/png.latex?p_%7B31%7D%20=%201/3"> y <img src="https://latex.codecogs.com/png.latex?p_%7B13%7D%20=%200">.</li>
+</ul>
+<p>Luego, dado que <img src="https://latex.codecogs.com/png.latex?p_%7B13%7D(n)%20=%200%20%5Cquad%20%5Cforall%20n">, la cadena <strong>no</strong> es irreducible.</p>
+</div>
+</div>
+</div>
+<p><strong>[b]</strong> Clasifique cada estado como recurrente o transitorio, y calcule el periodo de cada clase.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Para la <img src="https://latex.codecogs.com/png.latex?%5Ctext%7Bclase%7D_1%20=%20C(1)">, observamos que <img src="https://latex.codecogs.com/png.latex?f_%7B11%7D(2)%20=%201"> y por lo tanto <img src="https://latex.codecogs.com/png.latex?f_%7B22%7D(2)%20=%201"> por propiedad de clase. Además, una clase cerrada y finita es recurrente.</p>
+<p>Para la <img src="https://latex.codecogs.com/png.latex?%5Ctext%7Bclase%7D_3%20=%20C(3)">, es transitoria, ya que <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0Af_%7B33%7D%20&amp;=%20p_%7B34%7D(1)%20%5Ccdot%20p_%7B43%7D(1)%20%20%5C%5C%0A&amp;=%20%5Cfrac%7B2%7D%7B3%7D%20%3C%201%0A%5Cend%7Baligned%7D%0A"></p>
+<p>De igual forma <img src="https://latex.codecogs.com/png.latex?p_%7B11%7D(2n)%20=%201"> y <img src="https://latex.codecogs.com/png.latex?p_%7B33%7D(2n)%20=%20(2/3)%5En">. Además, los periodos son <img src="https://latex.codecogs.com/png.latex?d(1)%20=%202"> y <img src="https://latex.codecogs.com/png.latex?d(3)%20=%202"></p>
+</div>
+</div>
+</div>
+<p><strong>[c]</strong> Obtenga la distribución invariante y los tiempos medios de recurrencia de los estados recurrentes.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Buscamos <img src="https://latex.codecogs.com/png.latex?%5Cpi"> tal que <img src="https://latex.codecogs.com/png.latex?%5Cpi%20P%20=%20%5Cpi">: <img src="https://latex.codecogs.com/png.latex?%0A(%5Cpi_1,%20%5Cpi_2,%20%5Cpi_3,%20%5Cpi_4)%0A%5Cbegin%7Bpmatrix%7D%0A0%20&amp;%201%20&amp;%200%20&amp;%200%20%5C%5C%0A1%20&amp;%200%20&amp;%200%20&amp;%200%20%5C%5C%0A1/3%20&amp;%200%20&amp;%200%20&amp;%202/3%20%5C%5C%0A0%20&amp;%200%20&amp;%201%20&amp;%200%0A%5Cend%7Bpmatrix%7D%0A=%20(%5Cpi_1,%20%5Cpi_2,%20%5Cpi_3,%20%5Cpi_4)%0A"></p>
+<p>Lo que nos entrega el sistema:</p>
+<p><img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Ctext%7B(i)%7D%20%5Cquad%20&amp;%20%5Cpi_2%20+%20%5Ctfrac%7B%5Cpi_3%7D%7B3%7D%20=%20%5Cpi_1%20%5C%5C%0A%5Ctext%7B(ii)%7D%20%5Cquad%20&amp;%20%5Cpi_1%20=%20%5Cpi_2%20%5C%5C%0A%5Ctext%7B(iii)%7D%20%5Cquad%20&amp;%20%5Cpi_4%20=%20%5Cpi_3%20%5C%5C%0A%5Ctext%7B(iv)%7D%20%5Cquad%20&amp;%20%5Ctfrac%7B2%7D%7B3%7D%5Cpi_3%20=%20%5Cpi_4%20%5C%5C%0A%5Ctext%7B(v)%7D%20%5Cquad%20&amp;%20%5Cpi_1%20+%20%5Cpi_2%20+%20%5Cpi_3%20+%20%5Cpi_4%20=%201%0A%5Cend%7Baligned%7D%0A"></p>
+<p>De (iii) y (iv) se tiene <img src="https://latex.codecogs.com/png.latex?%5Cpi_3%20=%20%5Cpi_4%20=%200">. Luego <img src="https://latex.codecogs.com/png.latex?%5Cpi_1%20+%20%5Cpi_2%20=%201"> y <img src="https://latex.codecogs.com/png.latex?%5Cpi_1%20=%20%5Cpi_2">, por lo que <img src="https://latex.codecogs.com/png.latex?%0A%5Cpi%20=%20%5Cleft(%5Ctfrac%7B1%7D%7B2%7D,%20%5Ctfrac%7B1%7D%7B2%7D,%200,%200%5Cright).%0A"></p>
+<p>Lo cual hace sentido, porque <img src="https://latex.codecogs.com/png.latex?C(1)"> absorbe eventualmente a la cadena.</p>
+<p>Luego, por definición, <img src="https://latex.codecogs.com/png.latex?%0A%5Cmu_j%20=%20%5Cfrac%7B1%7D%7B%5Cpi_j%7D%20%5Cquad%20%5CLongrightarrow%20%5Cquad%20%5Cmu_1%20=%20%5Cfrac%7B1%7D%7B1/2%7D%20=%202%20=%20%5Cmu_2.%0A"></p>
+</div>
+</div>
+</div>
+<p><strong>[d]</strong> Muestre que <img src="https://latex.codecogs.com/png.latex?p_%7B11%7D(2n)%20=%201"> y <img src="https://latex.codecogs.com/png.latex?p_%7B11%7D(2n+1)%20=%200"> para todo <img src="https://latex.codecogs.com/png.latex?n%20%5Cgeq%200">. Explique por qué esto no contradice la parte (c), es decir, por qué el teorema de convergencia no es aplicable a pesar de que la distribución invariante existe.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Para todo <img src="https://latex.codecogs.com/png.latex?n%20%5Cin%20%5Cmathbb%7BN%7D">, <img src="https://latex.codecogs.com/png.latex?n%20%5Cgeq%200">, buscamos que <img src="https://latex.codecogs.com/png.latex?%0Ap_%7B11%7D(2n)%20=%201%20%5Cquad%20:=%20%5Ctext%7B%E2%80%9Cen%20dos%20pasos%20siempre%20estamos%20en%201%E2%80%9D%7D.%0A"></p>
+<p>Vemos que, <img src="https://latex.codecogs.com/png.latex?p_%7B12%7D%20=%201"> y <img src="https://latex.codecogs.com/png.latex?p_%7B21%7D=1"> . Si partimos de <img src="https://latex.codecogs.com/png.latex?1"> siempre volveremos en 2 pasos. De manera que <img src="https://latex.codecogs.com/png.latex?p_%7B11%7D(2n)%20=%201"> y en cada instante impar estaremos en <img src="https://latex.codecogs.com/png.latex?2">, se sigue que <img src="https://latex.codecogs.com/png.latex?p_%7B11%7D(2n+1)%20=%200">.</p>
+<p>El teorema de convergenica no aplica ya que <img src="https://latex.codecogs.com/png.latex?p_%7B12%7D%20=%201"> y <img src="https://latex.codecogs.com/png.latex?p_%7B21%7D%20=%201">, es decir, es un estado oscilante, que <strong>solo en los pares retorna</strong>. Formalmente, no es una cadena aperiodica, y por lo tanto no cumple con los requisitos.</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="ejercicio-2." class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-2.">Ejercicio 2.</h3>
+<p>Una mesa de ayuda recibe consultas telefónicas según un proceso de Poisson <img src="https://latex.codecogs.com/png.latex?%5C%7BN_t%5E%7B(1)%7D%5C%7D"> de parametro <img src="https://latex.codecogs.com/png.latex?%5Clambda_1=4"> por hora y consultas por chat según un proceso de Poisson <img src="https://latex.codecogs.com/png.latex?%5C%7BN_t%5E%7B(2)%7D%5C%7D"> de parámetro <img src="https://latex.codecogs.com/png.latex?%5Clambda_2=6"> por hora, ambos independientes. Sean <img src="https://latex.codecogs.com/png.latex?T_1"> y <img src="https://latex.codecogs.com/png.latex?T_2"> los instantes de la primera consulta de cada tipo y sea <img src="https://latex.codecogs.com/png.latex?T=%5Cmin(T_1,%20T_2)">.</p>
+<p><strong>[a]</strong> Identifique, por superposición, la distribución del número total de consultas recibidas en media hora y calcule la probabilidad de que se reciban al menos tres.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Llamemos <img src="https://latex.codecogs.com/png.latex?M_t"> a la variable aleatoria que cuenta el número total de consultas recibidas en el intervalo <img src="https://latex.codecogs.com/png.latex?%5B0,%20t%5D">. Por superposición, <img src="https://latex.codecogs.com/png.latex?M_t%20=%20N_t%5E%7B(1)%7D%20+%20N_t%5E%7B(2)%7D"> es un proceso de Poisson con parámetro <img src="https://latex.codecogs.com/png.latex?%5Clambda%20=%20%5Clambda_1%20+%20%5Clambda_2%20=%204%20+%206%20=%2010"> por hora.</p>
+<p>En particular <img src="https://latex.codecogs.com/png.latex?M_%7B0.5%7D%20%5Csim%20Poisson(5)">. \ Ahora, la probabilidad de que se reciban al menos tres consultas en media hora corresponde a: <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0AP(M_%7B0.5%7D%20%5Cge%203)%20&amp;=%201%20-%20P(M_%7B0.5%7D%20%3C%203)%20=%201%20-%20P(M_%7B0.5%7D%20=%200)%20-%20P(M_%7B0.5%7D%20=%201)%20-%20P(M_%7B0.5%7D%20=%202)%5C%5C%0A&amp;=%201%20-%20e%5E%7B-5%7D%20%5Cleft(%20%5Cfrac%7B5%5E0%7D%7B0!%7D%20+%20%5Cfrac%7B5%5E1%7D%7B1!%7D%20+%20%5Cfrac%7B5%5E2%7D%7B2!%7D%20%5Cright)%20=%201%20-%20e%5E%7B-5%7D%20%5Cleft(%201%20+%205%20+%2012.5%20%5Cright)%5C%5C%0A&amp;=%201%20-%20e%5E%7B-5%7D%20%5Ccdot%2018.5%20%5Capprox%200.9596.%0A%5Cend%7Baligned%7D%0A"></p>
+</div>
+</div>
+</div>
+<p><strong>[b]</strong> Usando la independencia de ambos procesos, calcule la probabilidad de que en una hora se reciban exactamente dos consultas telefónicas y exactamente tres por chat.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Dado que <img src="https://latex.codecogs.com/png.latex?N_1%5E%7B(1)%7D%20%5Csim%20Poisson(4)"> y <img src="https://latex.codecogs.com/png.latex?N_1%5E%7B(2)%7D%20%5Csim%20Poisson(6)">, y que ambos procesos son independientes, tenemos: <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0AP(N_1%5E%7B(1)%7D%20=%202%20%5Ctext%7B%20y%20%7D%20N_1%5E%7B(2)%7D%20=%203)%20&amp;=%20P(N_1%5E%7B(1)%7D%20=%202)%20%5Ccdot%20P(N_1%5E%7B(2)%7D%20=%203)%20%5C%5C%0A&amp;=%20%5Cfrac%7B4%5E2%20e%5E%7B-4%7D%7D%7B2!%7D%20%5Ccdot%20%5Cfrac%7B6%5E3%20e%5E%7B-6%7D%7D%7B3!%7D%20%5C%5C%0A&amp;=%20%5Cfrac%7B16%20e%5E%7B-4%7D%7D%7B2%7D%20%5Ccdot%20%5Cfrac%7B216%20e%5E%7B-6%7D%7D%7B6%7D%20%5C%5C%0A&amp;=%208%20e%5E%7B-4%7D%20%5Ccdot%2036%20e%5E%7B-6%7D%20%5C%0A&amp;=%20288%20e%5E%7B-10%7D%20%5Capprox%200.0131.%0A%5Cend%7Baligned%7D%0A"></p>
+</div>
+</div>
+</div>
+<p><strong>[c]</strong> Escriba la densidad conjunta del vector <img src="https://latex.codecogs.com/png.latex?(T_1,%20T_2)">. Muestre que <img src="https://latex.codecogs.com/png.latex?T%20%E2%88%BC%20exp(%5Clambda_1%20+%20%5Clambda_2)"> y calcule <img src="https://latex.codecogs.com/png.latex?E(T)"> en minutos.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Veamos que <img src="https://latex.codecogs.com/png.latex?T_1"> y <img src="https://latex.codecogs.com/png.latex?T_2"> son independientes. Además, por definición de un proceso de Poisson, <img src="https://latex.codecogs.com/png.latex?T_1%20%5Csim%20exp(%5Clambda_1)"> y <img src="https://latex.codecogs.com/png.latex?T_2%20%5Csim%20exp(%5Clambda_2)">. Por lo tanto, la densidad conjunta es: <img src="https://latex.codecogs.com/png.latex?%0Af_%7BT_1,%20T_2%7D(t_1,%20t_2)%20=%20f_%7BT_1%7D(t_1)%20%5Ccdot%20f_%7BT_2%7D(t_2)%20=%20%5Clambda_1%20e%5E%7B-%5Clambda_1%20t_1%7D%20%5Ccdot%20%5Clambda_2%20e%5E%7B-%5Clambda_2%20t_2%7D,%20%5Cquad%20t_1,%20t_2%20%5Cge%200.%0A"></p>
+<p>Ahora, nos piden mostrar que <img src="https://latex.codecogs.com/png.latex?T%20=%20%5Cmin(T_1,%20T_2)%20%5Csim%20exp(%5Clambda_1%20+%20%5Clambda_2)">. Consideremos el momento <img src="https://latex.codecogs.com/png.latex?t">, el momento de la primera consulta de cualquier tipo. La probabilidad de que <img src="https://latex.codecogs.com/png.latex?T%3Et"> corresponde a que no haya llegado ninguna consulta de ningún tipo hasta el momento <img src="https://latex.codecogs.com/png.latex?t">, es decir: <img src="https://latex.codecogs.com/png.latex?%0AP(T%20%3E%20t)%20=%20P(T_1%20%3E%20t%20%5Ctext%7B%20y%20%7D%20T_2%20%3E%20t)%20=%20P(T_1%20%3E%20t)%20%5Ccdot%20P(T_2%20%3E%20t)%20=%20e%5E%7B-%5Clambda_1%20t%7D%20%5Ccdot%20e%5E%7B-%5Clambda_2%20t%7D%20=%20e%5E%7B-(%5Clambda_1%20+%20%5Clambda_2)%20t%7D.%0A"> Recordemos que <img src="https://latex.codecogs.com/png.latex?P(T%20%3E%20t)%20=%201%20-%20F_T(t)">, por lo que la función de distribución de <img src="https://latex.codecogs.com/png.latex?T"> es: <img src="https://latex.codecogs.com/png.latex?%0AF_T(t)%20=%201%20-%20e%5E%7B-(%5Clambda_1%20+%20%5Clambda_2)%20t%7D,%20%5Cquad%20t%20%5Cge%200,%0A"> y por lo tanto la densidad de <img src="https://latex.codecogs.com/png.latex?T"> es: <img src="https://latex.codecogs.com/png.latex?%0Af_T(t)%20=%20(%5Clambda_1%20+%20%5Clambda_2)%20e%5E%7B-(%5Clambda_1%20+%20%5Clambda_2)%20t%7D,%20%5Cquad%20t%20%5Cge%200,%0A"> lo que nos dice que <img src="https://latex.codecogs.com/png.latex?T%20%5Csim%20exp(%5Clambda_1%20+%20%5Clambda_2)">. Finalmente <img src="https://latex.codecogs.com/png.latex?E(T)"> = = = 6 .</p>
+</div>
+</div>
+</div>
+<p><strong>[d]</strong> Integrando la densidad conjunta sobre la región correspondiente, muestre que: <img src="https://latex.codecogs.com/png.latex?%0AP(T%3Et,T_1%3CT_2)%20=%20%5Cfrac%7B%5Clambda_1%7D%7B%5Clambda_1+%5Clambda_2%7D%20e%5E%7B-(%5Clambda_1%20+%20%5Clambda_2)%20t%7D,%20%5Cquad%20t%20%5Cge%200.%0A"> Deduzca que <img src="https://latex.codecogs.com/png.latex?P(T_1%3CT_2)%20=%20%5Cfrac%7B%5Clambda_1%7D%7B%5Clambda_1+%5Clambda_2%7D"> y que los eventos <img src="https://latex.codecogs.com/png.latex?%5C%7BT%3Et%5C%7D%20%5Ctext%7B%20y%20%7D%20%5C%7BT_1%20%3C%20T_2%5C%7D"> son indenpendientes. Interprete este último hecho.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Recordemos que la conjunta es <img src="https://latex.codecogs.com/png.latex?f_%7BT_1,T_2%7D(t_1,t_2)%20=%20%5Clambda_1%20e%5E%7B-%5Clambda_1%20t_1%7D%20%5Ccdot%20%5Clambda_2%20e%5E%7B-%5Clambda_2%20t_2%7D">. Además buscamos que se cumpla que <img src="https://latex.codecogs.com/png.latex?%5C%7Bt%3C%20T_1%20%3C%20T_2%20%5C%7D"> , integrando esto corresponde a : <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Cint_%7Bt%7D%5E%7B%5Cinfty%7D%20%5Cint_%7Bt_1%7D%5E%7B%5Cinfty%7D%20%5Clambda_1%20e%5E%7B-%5Clambda_1%20t_1%7D%5Clambda_2%20e%5E%7B-%5Clambda_2%20t_2%7D%20dt_2dt_1%5C%5C%0A%5Cint_%7Bt%7D%5E%7B%5Cinfty%7D%20%5Clambda_1e%5E%7B-%5Clambda_1%20t_1%7D%20%5Cleft%5B%20-e%5E%7B-%5Clambda_2%20t_2%7D%20%5Cright%5D_%7Bt_2=t_1%7D%5E%7Bt_2=%5Cinfty%7D%20dt_1%5C%5C%0A%5Cint_%7Bt%7D%5E%7B%5Cinfty%7D%20%5Clambda_1%20e%5E%7B-%5Clambda_1%20t_1%7D%5Ccdot%20-e%5E%7B-%5Clambda_2%20t_1%7D%20dt_1%20=%20%5Clambda_1%20%5Cint_%7Bt%7D%5E%7B%5Cinfty%7D%20-e%5E%7B-t_1(%5Clambda_1%20+%20%5Clambda_2)%7D%5C%5C%0A%5Clambda_1%20%5Ccdot%5Cleft(%5Cfrac%7Be%5E%7B-t(%5Clambda_1%20+%5Clambda_2)%7D%7D%7B%5Clambda_1%20+%20%5Clambda_2%7D%5Cright)%0A%5Cend%7Baligned%7D%0A"></p>
+</div>
+</div>
+</div>
+<p>Que es exactamente lo que buscabamos. Ahora, veamos que en <em>[c]</em>, <img src="https://latex.codecogs.com/png.latex?P(T%3Et)%20=%20e%5E%7B-(%5Clambda_1%20+%20%5Clambda_2)%20t%7D">, que es exactmente una parte de la expresión que obtuvimos. De ahí podemos inferir que, efectivamente, <img src="https://latex.codecogs.com/png.latex?P(T_1%20%3C%20T_2)%20=%20%5Cfrac%7B%5Clambda_1%7D%7B%5Clambda_1%20+%20%5Clambda_2%7D"> y que los eventos <img src="https://latex.codecogs.com/png.latex?%5C%7BT%3Et%5C%7D%20%5Ctext%7B%20y%20%7D%20%5C%7BT_1%20%3C%20T_2%5C%7D"> son independientes.Esto tiene sentido en dos dimensiones: 1. Las densidades se multiplican 2. Notemos que el hecho de que la primera consulta llegue después de un tiempo <img src="https://latex.codecogs.com/png.latex?t"> no nos da información sobre si la primera consulta fue por teléfono o por chat.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>probabilidad</category>
+  <guid>https://canija2000.github.io/posts/Ejercicios-I2-estocasticos/</guid>
+  <pubDate>Mon, 12 Oct 2026 03:00:00 GMT</pubDate>
+  <media:content url="https://canija2000.github.io/posts/Ejercicios-I2-estocasticos/portada.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>Clase 16 - Análisis de Regresión</title>
   <dc:creator>Joaquín Bächler</dc:creator>
