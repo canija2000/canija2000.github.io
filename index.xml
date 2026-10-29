@@ -10,7 +10,1720 @@
 <atom:link href="https://canija2000.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>A blog built with Quarto</description>
 <generator>quarto-1.10.19</generator>
-<lastBuildDate>Mon, 12 Oct 2026 03:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 28 Oct 2026 03:00:00 GMT</lastBuildDate>
+<item>
+  <title>Clase 21 - Análisis de Regresión</title>
+  <dc:creator>Joaquín Bächler</dc:creator>
+  <link>https://canija2000.github.io/posts/clase 21/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="algo-de-contexto" class="level2">
+<h2 class="anchored" data-anchor-id="algo-de-contexto">algo de contexto</h2>
+<p>Seguimos con el modelo de rectas paralelas que armamos en la clase 16 con los datos <code>UN11</code> de Weisberg: <img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BE%7D(%5Ctext%7BlifeExpF%7D%20%5Cmid%20x,%20%5Ctext%7Bgrupo%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_%7B02%7DU_2%20+%20%5Cbeta_%7B03%7DU_3%20+%20%5Cbeta_1%20x,%20%5Cqquad%20x%20=%20%5Clog(%5Ctext%7Bppgdp%7D)%0A"></p>
+<p>Es decir, cada grupo (OCDE, África, otros) tiene su propio intercepto, pero todos comparten la misma pendiente. En R:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(alr4)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># carga también car</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2)</span>
+<span id="cb1-3"></span>
+<span id="cb1-4">m_69 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(lifeExpF <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> group <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log</span>(ppgdp), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> UN11)</span>
+<span id="cb1-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(m_69)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)  groupother groupafrica  log(ppgdp) 
+  49.529241   -1.534683  -12.170365    3.177320 </code></pre>
+</div>
+</div>
+<p>Ojo con el orden de los coeficientes, porque lo vamos a usar todo el rato: <code>(Intercept)</code>, <code>groupother</code>, <code>groupafrica</code>, <code>log(ppgdp)</code>. La OCDE es el grupo base, así que <code>groupother</code> y <code>groupafrica</code> son <strong>diferencias de intercepto respecto de la OCDE</strong>.</p>
+<p>La pregunta de esta primera parte es: una vez que tenemos el modelo, ¿cómo testeamos cosas sobre sus coeficientes? Y no solo “¿es este <img src="https://latex.codecogs.com/png.latex?%5Cbeta_j"> igual a cero?”, sino preguntas más interesantes como “¿África y otros tienen el mismo intercepto?” o “¿los tres grupos tienen el mismo intercepto?”.</p>
+</section>
+<section id="tests-de-wald" class="level2">
+<h2 class="anchored" data-anchor-id="tests-de-wald">Tests de Wald</h2>
+<p>El test de Wald está basado, para este contexto, en la distribución de nuestro estimador <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cbeta%7D">, de la forma: <img src="https://latex.codecogs.com/png.latex?%0A%5Chat%7B%5Cbeta%7D%20%5Csim%20N(%5Cbeta,%20V),%20%5Cqquad%20%5Chat%7BV%7D%20=%20%5Chat%7B%5Csigma%7D%5E2(X'X)%5E%7B-1%7D%0A"></p>
+<p>Es decir, toda la información que necesitamos está en dos objetos: el vector <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cbeta%7D"> y la matriz <img src="https://latex.codecogs.com/png.latex?%5Chat%7BV%7D">. En R son <code>coef()</code> y <code>vcov()</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">beta <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(m_69)</span>
+<span id="cb3-2">V    <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">vcov</span>(m_69)</span>
+<span id="cb3-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>(V, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            (Intercept) groupother groupafrica log(ppgdp)
+(Intercept)      11.557     -2.660      -4.261     -1.034
+groupother       -2.660      1.378       1.422      0.175
+groupafrica      -4.261      1.422       2.426      0.330
+log(ppgdp)       -1.034      0.175       0.330      0.100</code></pre>
+</div>
+</div>
+<p>En la diagonal de <img src="https://latex.codecogs.com/png.latex?%5Chat%7BV%7D"> están las varianzas de cada <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cbeta%7D_j"> [sus raíces son los errores estándar que salen en <code>summary()</code>], y fuera de la diagonal las covarianzas entre ellos. Esas covarianzas van a ser importantes en un rato.</p>
+<section id="un-coeficiente" class="level3">
+<h3 class="anchored" data-anchor-id="un-coeficiente">Un coeficiente</h3>
+<p>Como hemos visto anteriormente, podemos construir un <strong>test-t</strong> de la forma <img src="https://latex.codecogs.com/png.latex?%0At%20=%20%5Cfrac%7B%5Chat%7B%5Cbeta%7D_j%20-%20%5Cbeta_%7Bj0%7D%7D%7B%5Csqrt%7B%5Chat%7Bv%7D_%7Bjj%7D%7D%7D%20%5Csim%20t(%5Ctext%7Bdf%20de%20%7D%5Chat%7B%5Csigma%7D%5E2)%0A"></p>
+<p>Probemos con <img src="https://latex.codecogs.com/png.latex?H_0:%20%5Cbeta_%7B%5Ctext%7Bafrica%7D%7D%20=%200">, es decir, que África tiene el mismo intercepto que la OCDE:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">T0 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> beta[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"groupafrica"</span>] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(V[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"groupafrica"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"groupafrica"</span>])</span>
+<span id="cb5-2">T0</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>groupafrica 
+  -7.814297 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(m_69)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>coef[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"groupafrica"</span>, ]</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Estimate    Std. Error       t value      Pr(&gt;|t|) 
+-1.217037e+01  1.557449e+00 -7.814297e+00  3.352679e-13 </code></pre>
+</div>
+</div>
+<p>Nada nuevo: es exactamente el <code>t value</code> que nos entrega <code>summary()</code>. La gracia es que ahora sabemos de dónde sale.</p>
+</section>
+<section id="una-combinación-lineal" class="level3">
+<h3 class="anchored" data-anchor-id="una-combinación-lineal">Una combinación lineal</h3>
+<p>Ahora, ¿qué pasa si queremos comparar <strong>África con otros</strong>? Ninguno de los dos es el grupo base, así que no hay un coeficiente en el <code>summary()</code> que nos responda directamente. Lo que sí podemos hacer es escribir la hipótesis como una combinación lineal de los coeficientes: <img src="https://latex.codecogs.com/png.latex?%0AH_0:%20%5Cbeta_%7B%5Ctext%7Bother%7D%7D%20=%20%5Cbeta_%7B%5Ctext%7Bafrica%7D%7D%20%5Ciff%20%5Cbeta_%7B%5Ctext%7Bother%7D%7D%20-%20%5Cbeta_%7B%5Ctext%7Bafrica%7D%7D%20=%200%20%5Ciff%20a'%5Cbeta%20=%200,%20%5Cquad%20a%20=%20(0,%201,%20-1,%200)%0A"></p>
+<p>Para un <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cell%7D%20=%20a'%5Chat%7B%5Cbeta%7D">, podemos construir un test similarmente como: <img src="https://latex.codecogs.com/png.latex?%0At%20=%20%5Cfrac%7B%5Chat%7B%5Cell%7D%20-%20%5Cell_0%7D%7Bse(%5Chat%7B%5Cell%7D)%7D%20%5Csim%20t(%5Ctext%7Bdf%20de%20%7D%5Chat%7B%5Csigma%7D%5E2),%20%5Cqquad%20se(%5Chat%7B%5Cell%7D)%20=%20%5Csqrt%7Ba'%20%5Chat%7BV%7D%20a%7D%0A"></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">a      <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb9-2">ell    <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> beta)</span>
+<span id="cb9-3">se_ell <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(a) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> V <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> a)</span>
+<span id="cb9-4">T0     <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> ell <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> se_ell</span>
+<span id="cb9-5">T0</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         [,1]
+[1,] 10.86186</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pt</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">abs</span>(T0), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">df =</span> m_69<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>df.residual)   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># valor-p</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             [,1]
+[1,] 8.514219e-22</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>¿Por qué no basta con restar los dos errores estándar o sumarlos? Porque <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BVar%7D(%5Chat%7B%5Cbeta%7D_%7B%5Ctext%7Bother%7D%7D%20-%20%5Chat%7B%5Cbeta%7D_%7B%5Ctext%7Bafrica%7D%7D)%20=%20%5Ctext%7BVar%7D(%5Chat%7B%5Cbeta%7D_%7B%5Ctext%7Bother%7D%7D)%20+%20%5Ctext%7BVar%7D(%5Chat%7B%5Cbeta%7D_%7B%5Ctext%7Bafrica%7D%7D)%20-%202%5C,%5Ctext%7BCov%7D(%5Chat%7B%5Cbeta%7D_%7B%5Ctext%7Bother%7D%7D,%20%5Chat%7B%5Cbeta%7D_%7B%5Ctext%7Bafrica%7D%7D)%0A"> y ese término de covarianza es justamente lo que <img src="https://latex.codecogs.com/png.latex?a'%5Chat%7BV%7Da"> incluye automáticamente. Es lo mismo que hacíamos “a mano” para comparar medias en el capítulo 5.</p>
+</div>
+</div>
+<p>Con <img src="https://latex.codecogs.com/png.latex?t%20%5Capprox%2010.9"> la evidencia es abrumadora: África y otros <strong>no</strong> tienen el mismo intercepto.</p>
+</section>
+<section id="hipótesis-lineal-general" class="level3">
+<h3 class="anchored" data-anchor-id="hipótesis-lineal-general">Hipótesis lineal general</h3>
+<p>Ahora veremos el caso de una matriz <img src="https://latex.codecogs.com/png.latex?L"> de dimensión <img src="https://latex.codecogs.com/png.latex?q%20%5Ctimes%20p'">, donde <img src="https://latex.codecogs.com/png.latex?p'%20=%20%5Ctext%7Bn%C3%BAmero%20de%20coeficientes%20incluyendo%20%7D%5Cbeta_0"> y <img src="https://latex.codecogs.com/png.latex?q"> es el número de restricciones que queremos testear a la vez [cada fila de <img src="https://latex.codecogs.com/png.latex?L"> es una restricción]. Nuestro test evaluará la hipótesis nula de que <img src="https://latex.codecogs.com/png.latex?L%5Cbeta%20=%20c">, versus <img src="https://latex.codecogs.com/png.latex?L%5Cbeta%20%5Cneq%20c">. Así se construye: <img src="https://latex.codecogs.com/png.latex?%0AF%20=%20%5Cfrac%7B(L%5Chat%7B%5Cbeta%7D-c)'(L%5Chat%7BV%7DL')%5E%7B-1%7D(L%5Chat%7B%5Cbeta%7D-c)%7D%7Bq%7D%20%5Csim%20F(q,%20%5Ctext%7Bdf%20de%20%7D%5Chat%7B%5Csigma%7D%5E2)%0A"></p>
+<p>Fijémonos en la estructura: arriba está “qué tan lejos está <img src="https://latex.codecogs.com/png.latex?L%5Chat%7B%5Cbeta%7D"> de <img src="https://latex.codecogs.com/png.latex?c">”, pero medido en la escala de su propia varianza <img src="https://latex.codecogs.com/png.latex?L%5Chat%7BV%7DL'">. Es la versión matricial de <img src="https://latex.codecogs.com/png.latex?%5Cleft(%5Cfrac%7B%5Chat%7B%5Cell%7D%20-%20%5Cell_0%7D%7Bse(%5Chat%7B%5Cell%7D)%7D%5Cright)%5E2">. De hecho, si <img src="https://latex.codecogs.com/png.latex?q%20=%201">, <img src="https://latex.codecogs.com/png.latex?L"> es simplemente <img src="https://latex.codecogs.com/png.latex?a'"> y obtenemos <img src="https://latex.codecogs.com/png.latex?F%20=%20t%5E2">.</p>
+<p>Comprobémoslo con <code>car::linearHypothesis()</code>, que hace este cálculo por nosotros:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">car<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">linearHypothesis</span>(m_69, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"groupother = groupafrica"</span>))</span>
+<span id="cb13-2">T0<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span></code></pre></div></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ver output">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ver output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Linear hypothesis test:
+groupother - groupafrica = 0
+
+Model 1: restricted model
+Model 2: lifeExpF ~ group + log(ppgdp)
+
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    196 8170.2                                  
+2    195 5090.4  1    3079.8 117.98 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         [,1]
+[1,] 117.9801</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://latex.codecogs.com/png.latex?F%20=%20117.98%20=%2010.86%5E2">. Mismo test, dos formas de escribirlo.</p>
+<p>Ahora sí, un caso donde <strong>solo</strong> podemos usar <img src="https://latex.codecogs.com/png.latex?F">: ¿los tres grupos tienen el mismo intercepto? Eso son dos restricciones a la vez, <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7B%5Ctext%7Bother%7D%7D%20=%200"> y <img src="https://latex.codecogs.com/png.latex?%5Cbeta_%7B%5Ctext%7Bafrica%7D%7D%20=%200">, así que <img src="https://latex.codecogs.com/png.latex?q%20=%202">: <img src="https://latex.codecogs.com/png.latex?%0AL%20=%20%5Cbegin%7Bpmatrix%7D%200%20&amp;%201%20&amp;%200%20&amp;%200%20%5C%5C%200%20&amp;%200%20&amp;%201%20&amp;%200%20%5Cend%7Bpmatrix%7D,%20%5Cqquad%20c%20=%20%5Cbegin%7Bpmatrix%7D%200%20%5C%5C%200%20%5Cend%7Bpmatrix%7D%0A"></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">L  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rbind</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>),</span>
+<span id="cb16-2">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>))</span>
+<span id="cb16-3">q  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(L)</span>
+<span id="cb16-4">Lb <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> L <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> beta</span>
+<span id="cb16-5">F0 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(Lb) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">solve</span>(L <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> V <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(L)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> Lb <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> q</span>
+<span id="cb16-6">F0                                                   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># F de Wald a mano</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         [,1]
+[1,] 59.38264</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pf</span>(F0, q, m_69<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>df.residual, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lower.tail =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># valor-p</span></span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             [,1]
+[1,] 7.234338e-21</code></pre>
+</div>
+</div>
+<p>Y lo interesante es que este mismo número aparece por <strong>tres caminos distintos</strong>:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" aria-controls="tabset-1-1" aria-selected="true" href="">linearHypothesis</a></li><li class="nav-item"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" aria-controls="tabset-1-2" aria-selected="false" href="">Anova tipo II</a></li><li class="nav-item"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" aria-controls="tabset-1-3" aria-selected="false" href="">Modelos anidados</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">car<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">linearHypothesis</span>(m_69, L, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">rhs =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Linear hypothesis test:
+groupother = 0
+groupafrica = 0
+
+Model 1: restricted model
+Model 2: lifeExpF ~ group + log(ppgdp)
+
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    197 8190.7                                  
+2    195 5090.4  2    3100.3 59.383 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1">car<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Anova</span>(m_69)[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"group"</span>, ]</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Anova Table (Type II tests)
+
+Response: lifeExpF
+      Sum Sq Df F value    Pr(&gt;F)    
+group 3100.3  2  59.383 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" aria-labelledby="tabset-1-3-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">anova</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(lifeExpF <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log</span>(ppgdp), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> UN11), m_69)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: lifeExpF ~ log(ppgdp)
+Model 2: lifeExpF ~ group + log(ppgdp)
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    197 8190.7                                  
+2    195 5090.4  2    3100.3 59.383 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>En los tres casos <img src="https://latex.codecogs.com/png.latex?F%20=%2059.383">. El tercero es el más revelador: comparar el modelo sin <code>group</code> contra el modelo con <code>group</code> [el test <img src="https://latex.codecogs.com/png.latex?F"> por comparación de <img src="https://latex.codecogs.com/png.latex?RSS"> que vimos en la clase 16] da <strong>exactamente</strong> lo mismo que el test de Wald.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>En el modelo lineal con errores normales, los tests de <strong>Wald</strong> y de <strong>razón de verosimilitud</strong> (pruebas <img src="https://latex.codecogs.com/png.latex?F"> por comparación de <img src="https://latex.codecogs.com/png.latex?RSS">) son equivalentes. Sin embargo, en otros modelos, como una regresión logística, pueden diferir.</p>
+</div>
+</div>
+<p>Por último, las restricciones no tienen por qué ser del mismo “tipo”. Podemos testear a la vez que África y otros tengan el mismo intercepto <strong>y</strong> que la pendiente de <img src="https://latex.codecogs.com/png.latex?%5Clog(%5Ctext%7Bppgdp%7D)"> sea 3:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1">car<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">linearHypothesis</span>(m_69, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"groupother - groupafrica = 0"</span>,</span>
+<span id="cb26-2">                              <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"log(ppgdp) = 3"</span>))</span></code></pre></div></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ver output">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ver output
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Linear hypothesis test:
+groupother - groupafrica = 0
+log(ppgdp) = 3
+
+Model 1: restricted model
+Model 2: lifeExpF ~ group + log(ppgdp)
+
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    197 9417.1                                  
+2    195 5090.4  2    4326.7 82.873 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>En resumen: <strong>cualquier hipótesis lineal sobre <img src="https://latex.codecogs.com/png.latex?%5Cbeta"> se escribe como <img src="https://latex.codecogs.com/png.latex?L%5Cbeta%20=%20c"></strong>. Con <img src="https://latex.codecogs.com/png.latex?q%20=%201"> es un <img src="https://latex.codecogs.com/png.latex?t"> (o <img src="https://latex.codecogs.com/png.latex?F%20=%20t%5E2">), con <img src="https://latex.codecogs.com/png.latex?q%20%3E%201"> solo hay <img src="https://latex.codecogs.com/png.latex?F">.</p>
+<hr>
+</section>
+</section>
+<section id="interpretación-de-tests" class="level2">
+<h2 class="anchored" data-anchor-id="interpretación-de-tests">Interpretación de tests</h2>
+<p>Hasta ahora hemos rechazado hipótesis con valores-p minúsculos, del orden de <img src="https://latex.codecogs.com/png.latex?10%5E%7B-21%7D">. Pero vale la pena detenerse y preguntarse: cuando un test rechaza, <strong>¿qué tan probable es que el efecto sea real?</strong></p>
+<p>La intuición dice “si <img src="https://latex.codecogs.com/png.latex?%5Calpha%20=%200.05">, me equivoco el 5% de las veces”. Pero eso responde otra pregunta. Veámoslo con un ejemplo.</p>
+<section id="cuánto-vale-un-rechazo" class="level3">
+<h3 class="anchored" data-anchor-id="cuánto-vale-un-rechazo">¿Cuánto vale un rechazo?</h3>
+<p>En un curso hay 2.000 informes: <strong>100 fueron hechos con IA</strong> y 1.900 son honestos. El profesor no lo sabe. Un detector revisa cada informe y lo <strong>acusa</strong> o no. Para cada informe:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?H_0">: “el informe es honesto”; acusar <img src="https://latex.codecogs.com/png.latex?="> rechazar <img src="https://latex.codecogs.com/png.latex?H_0">.</li>
+<li>El detector detecta al 80% de los informes con IA (<strong>potencia</strong> <img src="https://latex.codecogs.com/png.latex?%5Cgamma%20=%200.8">).</li>
+<li>Acusa por error al 5% de los honestos (<strong>nivel</strong> <img src="https://latex.codecogs.com/png.latex?%5Calpha%20=%200.05">).</li>
+</ul>
+<p>Contemos:</p>
+<div id="tbl-detector" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-detector-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Resultado del detector sobre los 2.000 informes
+</figcaption>
+<div aria-describedby="tbl-detector-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: center;">Acusa</th>
+<th style="text-align: center;">No acusa</th>
+<th style="text-align: center;">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Usó IA</td>
+<td style="text-align: center;"><strong>80</strong></td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">100</td>
+</tr>
+<tr class="even">
+<td>Honesto</td>
+<td style="text-align: center;"><strong>95</strong></td>
+<td style="text-align: center;">1.805</td>
+<td style="text-align: center;">1.900</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td style="text-align: center;"><strong>175</strong></td>
+<td style="text-align: center;">1.825</td>
+<td style="text-align: center;">2.000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Ahora, el detector acusó a un alumno. ¿Qué probabilidad hay de que haya usado IA? <strong>No es 95%</strong>. De los 175 acusados, solo 80 usaron IA: <img src="https://latex.codecogs.com/png.latex?%0A%5CPr(%5Ctext%7BIA%7D%20%5Cmid%20%5Ctext%7Bacusado%7D)%20=%20%5Cfrac%7B80%7D%7B175%7D%20=%200.46%0A"></p>
+<p>Más de la mitad de los acusados son inocentes. El 5% es la fracción de <strong>honestos</strong> que resultan acusados; la fracción de <strong>acusados</strong> que son inocentes es otra cosa completamente distinta.</p>
+</section>
+<section id="la-fórmula-general" class="level3">
+<h3 class="anchored" data-anchor-id="la-fórmula-general">La fórmula general</h3>
+<p>Si generalizamos la tabla, sea <img src="https://latex.codecogs.com/png.latex?f"> la fracción de tests donde rechazar la <img src="https://latex.codecogs.com/png.latex?H_0"> es lo correcto [en el ejemplo, <img src="https://latex.codecogs.com/png.latex?f%20=%20100/2.000%20=%200.05">]. Entonces (Ioannidis, 2005): <img src="https://latex.codecogs.com/png.latex?%0A%5CPr(%5Ctext%7Bdescubrimiento%20verdadero%7D%20%5Cmid%20%5Ctext%7Bdescubrimiento%7D)%20=%20%5Cfrac%7Bf%5Cgamma%7D%7Bf%5Cgamma%20+%20(1-f)%5Calpha%7D%0A"></p>
+<p>Es Bayes puro: arriba están los rechazos correctos (<img src="https://latex.codecogs.com/png.latex?f%5Cgamma">) y abajo todos los rechazos, correctos más falsos (<img src="https://latex.codecogs.com/png.latex?(1-f)%5Calpha">). Juega con los parámetros:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb28" data-startfrom="242" data-source-offset="-0" style="background: #f1f3f5;"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 241;"><span id="cb28-242">viewof f <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Inputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">range</span>([<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0001</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">value</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.05</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">step</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.0001</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">label</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"f (fracción con efecto real)"</span>})</span>
+<span id="cb28-243">viewof gamma <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Inputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">range</span>([<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.05</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.99</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">value</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.8</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">step</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.01</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">label</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"γ (potencia)"</span>})</span>
+<span id="cb28-244">viewof alpha <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Inputs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">range</span>([<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.001</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.2</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">value</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.05</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">step</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.001</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">label</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"α (nivel)"</span>})</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="quarto-ojs-syntax-error">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29" data-startfrom="247" data-syntax-error-position="169" data-source-offset="9" style="background: #f1f3f5;"><pre class="sourceCode numberSource numberLines java code-with-copy"><code class="sourceCode java" style="counter-reset: source-line 246;"><span id="cb29-247">```<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>ojs<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span id="cb29-248"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">//| echo: false</span></span>
+<span id="cb29-249">ppv <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> f <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> gamma <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span>f <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> gamma <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> f<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> alpha<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span id="cb29-250">md`De cada <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2.000</span> tests<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>$<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">Math</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2000</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> f <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> gamma<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)}**</span> rechazos verdaderos y <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>$<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">Math</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2000</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">(</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> f<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> alpha<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">)}**</span> falsos<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span></span>
+<span id="cb29-251"></span>
+<span id="cb29-252">```</span></code></pre></div></div>
+<div class="cell-output cell-output-error">
+<div class="callout callout-style-default callout-important callout-empty-content callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>OJS Syntax Error (line 250, column 122)Unterminated template
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+</div>
+</div>
+<p><img src="https://latex.codecogs.com/png.latex?%5CPr(%5Ctext%7Bverdadero%7D%20%5Cmid%20%5Ctext%7Brechazo%7D)%20=%20$%7Bppv.toFixed(3)%7D">`</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb30" data-startfrom="257" data-source-offset="-0" style="background: #f1f3f5;"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 256;"><span id="cb30-257">curva <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> d3<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">range</span>(<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">Math</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">log10</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.001</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.02</span>)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">map</span>(e <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">=&gt;</span> {</span>
+<span id="cb30-258">  <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">const</span> ff <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span> e</span>
+<span id="cb30-259">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">f</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> ff<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">ppv</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> ff <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> gamma <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (ff <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> gamma <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> ff) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> alpha)}</span>
+<span id="cb30-260">})</span>
+<span id="cb30-261">Plot<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>({</span>
+<span id="cb30-262">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">type</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"log"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">label</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"f (fracción con efecto real)"</span>}<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb30-263">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">y</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">domain</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> [<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">label</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Pr(verdadero | rechazo)"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">grid</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">true</span>}<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb30-264">  <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">marks</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> [</span>
+<span id="cb30-265">    Plot<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">line</span>(curva<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"f"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">y</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ppv"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">stroke</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"steelblue"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">strokeWidth</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>})<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb30-266">    Plot<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dot</span>([{f<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> ppv}]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">x</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"f"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">y</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ppv"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">fill</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"firebrick"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">r</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>})<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb30-267">    Plot<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ruleY</span>([<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>]<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> {<span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">strokeDasharray</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"4,4"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">stroke</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gray"</span>})</span>
+<span id="cb30-268">  ]</span>
+<span id="cb30-269">})</span></code></pre></div></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<p>Algunas cosas para probar:</p>
+<ul>
+<li><strong>Potencia baja</strong> (<img src="https://latex.codecogs.com/png.latex?%5Cgamma%20=%200.2">, <img src="https://latex.codecogs.com/png.latex?f%20=%200.05">): se detectan pocos de los que usaron IA, pero los honestos acusados por error siguen siendo 95. Un rechazo vale poco [<img src="https://latex.codecogs.com/png.latex?20/115%20=%200.17">].</li>
+<li><strong>Pocos usan IA</strong> (<img src="https://latex.codecogs.com/png.latex?f%20=%200.005">, es decir, 10 de 2.000): aunque el detector sea bueno, los acusados son casi todos inocentes [<img src="https://latex.codecogs.com/png.latex?%5Capprox%200.07">]. Probar muchas hipótesis de las que casi ninguna es cierta produce rechazos casi todos falsos.</li>
+<li><strong>Muchos usan IA</strong> (<img src="https://latex.codecogs.com/png.latex?f%20=%200.5">): un rechazo vale mucho [<img src="https://latex.codecogs.com/png.latex?800/850%20=%200.94">].</li>
+<li>Con <img src="https://latex.codecogs.com/png.latex?f%20=%201/16"> el rechazo es una moneda al aire: igualmente probable de ser verdadero o falso.</li>
+<li>En un estudio de asociación genómica con 100.000 polimorfismos y $$10 genes relevantes, <img src="https://latex.codecogs.com/png.latex?f%20=%200.0001">. Ahí casi todo “descubrimiento” es falso.</li>
+</ul>
+<p>La moraleja: <strong>rechazar vale cuando la hipótesis tenía sentido <em>antes</em> de ver los datos</strong>.</p>
+</section>
+<section id="testeo-múltiple" class="level3">
+<h3 class="anchored" data-anchor-id="testeo-múltiple">Testeo múltiple</h3>
+<p>Esto se conecta directamente con el problema del testeo múltiple. Si hacemos 100 tests independientes al 5% y <strong>todas</strong> las <img src="https://latex.codecogs.com/png.latex?H_0"> son verdaderas, esperamos $$5 “significativos” igual. Simulémoslo:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2026</span>)</span>
+<span id="cb31-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 100 tests t sobre datos N(0,1): H0: mu = 0 es verdadera en todos</span></span>
+<span id="cb31-3">p <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">replicate</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t.test</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rnorm</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>p.value)</span>
+<span id="cb31-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(p <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.05</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+</div>
+<p>Obtuvimos 4 “descubrimientos” sin que haya ningún efecto real. Las soluciones pasan por ajustar los valores-p, ya sea controlando el error por familia (Bonferroni, Tukey, del capítulo 5) o la tasa de descubrimientos falsos (Benjamini y Hochberg, 1995):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">p.adjust</span>(p, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bonferroni"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.05</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sum</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">p.adjust</span>(p, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"BH"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.05</span>)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>Ambas correcciones eliminan los falsos positivos.</p>
+</section>
+<section id="advertencias-prácticas" class="level3">
+<h3 class="anchored" data-anchor-id="advertencias-prácticas">Advertencias prácticas</h3>
+<ul>
+<li><strong>Mirar los datos, no solo los tests</strong>: en los cuatro gráficos de Anscombe el test de pendiente da el mismo <img src="https://latex.codecogs.com/png.latex?t%20=%204.24"> (<img src="https://latex.codecogs.com/png.latex?p%20=%200.002">), pero solo en uno la regresión simple es apropiada.</li>
+<li><strong>Población vs muestra</strong>: los tests infieren de una muestra a una población. Los datos <code>UN11</code> cubren más del 99% de la población mundial: son una <strong>población</strong>, no una muestra. Los valores-p ahí se interpretan como “niveles de significancia reportados” (Freedman y Lane, 1983).</li>
+<li><strong>Cargar los dados</strong> (<em>stacking the deck</em>): el factor <code>group</code> de <code>UN11</code> se definió <strong>mirando los datos</strong> [África se veía distinto], así que un test que compare los grupos casi con certeza saldrá significativo. Nuestro <img src="https://latex.codecogs.com/png.latex?F%20=%2059.4"> de arriba no debería sorprender a nadie.</li>
+<li><strong>Efecto cajón de archivo</strong> (<em>file drawer</em>): si 100 investigadores repiten el mismo experimento sin efecto real, $$5% obtiene resultados significativos… y son los que publican.</li>
+<li><strong>El laboratorio no es el mundo real</strong>: observar un fenómeno puede cambiarlo (efecto <em>Hawthorne</em>); efectos vistos en condiciones controladas pueden no persistir en condiciones naturales.</li>
+</ul>
+<hr>
+</section>
+</section>
+<section id="mínimos-cuadrados-ponderados-wls" class="level2">
+<h2 class="anchored" data-anchor-id="mínimos-cuadrados-ponderados-wls">Mínimos cuadrados ponderados (WLS)</h2>
+<p>Cambiamos de capítulo (Weisberg, cap. 7: Varianzas). Todo lo que hicimos arriba descansa en un supuesto que hemos dado por sentado: la <strong>varianza constante</strong>, <img src="https://latex.codecogs.com/png.latex?%0A%5Ctext%7BVar%7D(Y%20%5Cmid%20X)%20=%20%5Csigma%5E2%0A"></p>
+<p>Pero en muchos casos la variabilidad de los errores depende de los valores de <img src="https://latex.codecogs.com/png.latex?X">. Cuando los errores no son homocedásticos, MCO sigue siendo insesgado, pero <strong>pierde eficiencia</strong> y sus errores estándar dejan de ser correctos. Y si los errores estándar están mal, <img src="https://latex.codecogs.com/png.latex?%5Chat%7BV%7D"> está mal, y todos los tests de Wald que acabamos de construir también.</p>
+<section id="el-modelo" class="level3">
+<h3 class="anchored" data-anchor-id="el-modelo">El modelo</h3>
+<p>La idea es permitir que cada observación tenga su propia varianza: <img src="https://latex.codecogs.com/png.latex?%0A%5Cbegin%7Baligned%7D%0A%5Cmathbb%7BE%7D(Y%20%5Cmid%20X%20=%20x_i)%20&amp;=%20x_i'%5Cbeta%20%5C%5C%0A%5Ctext%7BVar%7D(Y%20%5Cmid%20X%20=%20x_i)%20&amp;=%20%5Csigma%5E2%20/%20w_i,%20%5Cqquad%20w_i%20%3E%200%0A%5Cend%7Baligned%7D%0A"></p>
+<p>donde los pesos <img src="https://latex.codecogs.com/png.latex?w_i"> son <strong>conocidos</strong> (o estimados) y positivos. Notemos que si <img src="https://latex.codecogs.com/png.latex?w_i%20=%201"> para todo <img src="https://latex.codecogs.com/png.latex?i">, volvemos a MCO.</p>
+<p>La lógica de los pesos es intuitiva:</p>
+<ul>
+<li>Observación con varianza pequeña <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> alta confiabilidad <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> peso grande.</li>
+<li>Observación muy variable <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> menor confiabilidad <img src="https://latex.codecogs.com/png.latex?%5Crightarrow"> peso pequeño.</li>
+</ul>
+</section>
+<section id="el-estimador" class="level3">
+<h3 class="anchored" data-anchor-id="el-estimador">El estimador</h3>
+<p>En lugar de minimizar la suma de cuadrados usual, minimizamos una <strong>suma ponderada</strong>: <img src="https://latex.codecogs.com/png.latex?%0ARSS(%5Cbeta)%20=%20%5Csum_i%20w_i%20(y_i%20-%20x_i'%5Cbeta)%5E2%0A"></p>
+<p>Así, los residuos de las observaciones con mayor peso “cuestan” más, y el ajuste se acomoda a ellas. La solución matricial es: <img src="https://latex.codecogs.com/png.latex?%0A%5Chat%7B%5Cbeta%7D_%7BWLS%7D%20=%20(X'WX)%5E%7B-1%7DX'WY%0A"></p>
+<p>donde <img src="https://latex.codecogs.com/png.latex?W"> es la matriz diagonal con los pesos <img src="https://latex.codecogs.com/png.latex?w_i">. Sus propiedades:</p>
+<ul>
+<li><img src="https://latex.codecogs.com/png.latex?%5Cmathbb%7BE%7D(%5Chat%7B%5Cbeta%7D_%7BWLS%7D)%20=%20%5Cbeta">: insesgado.</li>
+<li><img src="https://latex.codecogs.com/png.latex?%5Ctext%7BVar%7D(%5Chat%7B%5Cbeta%7D_%7BWLS%7D)%20=%20%5Csigma%5E2(X'WX)%5E%7B-1%7D">.</li>
+<li>Es el estimador lineal insesgado de mínima varianza (versión generalizada del teorema de Gauss–Markov). Si los pesos son correctos, WLS es más eficiente que MCO.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>WLS es MCO disfrazado
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si multiplicamos toda la ecuación por <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bw_i%7D">: <img src="https://latex.codecogs.com/png.latex?%0A%5Csqrt%7Bw_i%7D%5C,y_i%20=%20%5Csqrt%7Bw_i%7D%5C,x_i'%5Cbeta%20+%20%5Csqrt%7Bw_i%7D%5C,e_i,%20%5Cqquad%20%5Ctext%7BVar%7D(%5Csqrt%7Bw_i%7D%5C,e_i)%20=%20w_i%20%5Ccdot%20%5Cfrac%7B%5Csigma%5E2%7D%7Bw_i%7D%20=%20%5Csigma%5E2%0A"> el error transformado <strong>sí</strong> tiene varianza constante. O sea, WLS no es más que MCO sobre los datos reescalados por <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bw_i%7D">. Por eso todo lo que sabemos de MCO [tests <img src="https://latex.codecogs.com/png.latex?t">, <img src="https://latex.codecogs.com/png.latex?F">, Wald] sigue funcionando.</p>
+</div>
+</div>
+</section>
+<section id="ejemplo-strong-interaction" class="level3">
+<h3 class="anchored" data-anchor-id="ejemplo-strong-interaction">Ejemplo: Strong Interaction</h3>
+<p>Datos de física de altas energías (Tabla 7.1 del libro). Cada <img src="https://latex.codecogs.com/png.latex?y_i"> es un conteo (sección eficaz, en mb) medido a un nivel de energía <img src="https://latex.codecogs.com/png.latex?x%20=%20s%5E%7B-1/2%7D">, y cada medición viene con su desviación estándar <img src="https://latex.codecogs.com/png.latex?SD_i"> <strong>conocida</strong>. Como <img src="https://latex.codecogs.com/png.latex?%5Ctext%7BVar%7D(y_i)%20=%20SD_i%5E2">, el peso natural es <img src="https://latex.codecogs.com/png.latex?w_i%20=%201/SD_i%5E2">.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1">x  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.345</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.287</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.251</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.225</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.207</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.186</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.161</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.132</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.084</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.060</span>)</span>
+<span id="cb37-2">y  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(  <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">367</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">311</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">295</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">268</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">253</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">239</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">220</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">213</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">193</span>,   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">192</span>)</span>
+<span id="cb37-3">SD <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">17</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>,     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)</span>
+<span id="cb37-4">w  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> SD<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">^</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb37-5">d  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(x, y, SD, w)</span></code></pre></div></div>
+</div>
+<p>Primero miremos si de verdad la varianza cambia con <img src="https://latex.codecogs.com/png.latex?x">:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-sd-x" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sd-x-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://canija2000.github.io/posts/clase 21/index_files/figure-html/fig-sd-x-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sd-x-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Desviación estándar de cada medición según x.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Claramente sí: las mediciones con <img src="https://latex.codecogs.com/png.latex?x"> grande son mucho menos precisas. La de <img src="https://latex.codecogs.com/png.latex?x%20=%200.345"> tiene <img src="https://latex.codecogs.com/png.latex?SD%20=%2017">, más de tres veces la de <img src="https://latex.codecogs.com/png.latex?x%20=%200.06">. MCO las trataría a todas por igual.</p>
+<p>Ajustemos ambos modelos. En R, WLS es simplemente agregar el argumento <code>weights</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1">mod1 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(y <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> x, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> d)                 <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># MCO</span></span>
+<span id="cb38-2">mod2 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(y <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> x, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> d, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">weights =</span> w)    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># WLS</span></span>
+<span id="cb38-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cbind</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">MCO =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(mod1), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">WLS =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(mod2))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 MCO      WLS
+(Intercept) 134.9998 148.4732
+x           619.7123 530.8354</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ver summary de ambos modelos">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ver summary de ambos modelos
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" aria-controls="tabset-2-1" aria-selected="true" href="">MCO</a></li><li class="nav-item"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" aria-controls="tabset-2-2" aria-selected="false" href="">WLS</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x, data = d)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-14.773  -9.319  -2.829   5.571  19.817 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   135.00      10.08    13.4 9.21e-07 ***
+x             619.71      47.68    13.0 1.16e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 12.69 on 8 degrees of freedom
+Multiple R-squared:  0.9548,    Adjusted R-squared:  0.9491 
+F-statistic: 168.9 on 1 and 8 DF,  p-value: 1.165e-06</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x, data = d, weights = w)
+
+Weighted Residuals:
+    Min      1Q  Median      3Q     Max 
+-2.3230 -0.8842  0.0000  1.3900  2.3353 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  148.473      8.079   18.38 7.91e-08 ***
+x            530.835     47.550   11.16 3.71e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 1.657 on 8 degrees of freedom
+Multiple R-squared:  0.9397,    Adjusted R-squared:  0.9321 
+F-statistic: 124.6 on 1 and 8 DF,  p-value: 3.71e-06</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Y para convencernos de que <code>lm</code> no hace magia, calculemos <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Cbeta%7D_%7BWLS%7D%20=%20(X'WX)%5E%7B-1%7DX'WY"> a mano:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1">X <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cbind</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, d<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>x)</span>
+<span id="cb42-2">W <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">diag</span>(d<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>w)</span>
+<span id="cb42-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">solve</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(X) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> W <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> X) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(X) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> W <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%*%</span> d<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>y</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         [,1]
+[1,] 148.4732
+[2,] 530.8354</code></pre>
+</div>
+</div>
+<p>Y también por el camino de “MCO disfrazado”, reescalando por <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bw_i%7D"> [el <code>0 +</code> es porque el intercepto ahora es la columna <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bw_i%7D">, no una columna de unos]:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">I</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(w) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> y) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(w) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">I</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sqrt</span>(w) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> x), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> d))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       sqrt(w) I(sqrt(w) * x) 
+      148.4732       530.8354 </code></pre>
+</div>
+</div>
+<p>Tres caminos, mismo resultado. Veamos el ajuste:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ols-wls" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ols-wls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://canija2000.github.io/posts/clase 21/index_files/figure-html/fig-ols-wls-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ols-wls-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: MCO (línea continua) vs WLS (línea segmentada). El tamaño del punto es proporcional a su peso.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>La recta WLS se acomoda a los puntos grandes [los más precisos, a la izquierda] y “se despreocupa” del punto de <img src="https://latex.codecogs.com/png.latex?x%20=%200.345">, que tiene apenas un 1.5% del peso total. Con MCO, ese mismo punto pesa lo mismo que cualquier otro (10%) y tira la pendiente hacia arriba: <img src="https://latex.codecogs.com/png.latex?619.7"> vs <img src="https://latex.codecogs.com/png.latex?530.8">.</p>
+</section>
+<section id="ponderación-de-medias-de-grupo" class="level3">
+<h3 class="anchored" data-anchor-id="ponderación-de-medias-de-grupo">Ponderación de medias de grupo</h3>
+<p>El ejemplo anterior era “fácil” porque nos regalaban las <img src="https://latex.codecogs.com/png.latex?SD_i">. Pero hay una situación muy común en la que los pesos salen solos: cuando cada observación es un <strong>promedio</strong>.</p>
+<p>Los datos <code>Rateprof</code> (paquete <code>alr4</code>) tienen evaluaciones de profesores en <em>RateMyProfessors.com</em>. Las variables que nos interesan:</p>
+<ul>
+<li><code>quality</code>: calificación promedio de calidad (1–5).</li>
+<li><code>easiness</code>: calificación promedio de facilidad del curso.</li>
+<li><code>raterInterest</code>: interés promedio del estudiante.</li>
+<li><code>numRaters</code>: número de estudiantes que evaluaron al profesor.</li>
+</ul>
+<p>Lo importante es que cada fila <strong>no</strong> es una evaluación, sino el <strong>promedio</strong> de las <img src="https://latex.codecogs.com/png.latex?n_i"> evaluaciones del profesor <img src="https://latex.codecogs.com/png.latex?i">. Si a nivel individual el modelo es <img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BE%7D(y_%7Bij%7D%20%5Cmid%20X_%7Bij%7D)%20=%20%5Cbeta_0%20+%20%5Cbeta_1%20x_%7B1ij%7D%20+%20%5Cbeta_2%20x_%7B2ij%7D,%20%5Cqquad%20%5Ctext%7BVar%7D(y_%7Bij%7D%20%5Cmid%20X_%7Bij%7D)%20=%20%5Csigma%5E2%0A"> donde <img src="https://latex.codecogs.com/png.latex?y_%7Bij%7D"> es la calificación del estudiante <img src="https://latex.codecogs.com/png.latex?j"> al profesor <img src="https://latex.codecogs.com/png.latex?i">, entonces para el promedio <img src="https://latex.codecogs.com/png.latex?%5Cbar%7By%7D_i">: <img src="https://latex.codecogs.com/png.latex?%0A%5Cmathbb%7BE%7D(%5Cbar%7By%7D_i%20%5Cmid%20X_i)%20=%20%5Cbeta_0%20+%20%5Cbeta_1%20%5Cbar%7Bx%7D_%7B1i%7D%20+%20%5Cbeta_2%20%5Cbar%7Bx%7D_%7B2i%7D,%20%5Cqquad%20%5Ctext%7BVar%7D(%5Cbar%7By%7D_i%20%5Cmid%20X_i)%20=%20%5Cfrac%7B%5Csigma%5E2%7D%7Bn_i%7D%0A"></p>
+<p>Los coeficientes son los mismos, pero la varianza del promedio es <img src="https://latex.codecogs.com/png.latex?%5Csigma%5E2/n_i">: es exactamente la forma <img src="https://latex.codecogs.com/png.latex?%5Csigma%5E2/w_i">, con <img src="https://latex.codecogs.com/png.latex?w_i%20=%20n_i%20="> <code>numRaters</code>. Un profesor evaluado por 86 estudiantes tiene un promedio mucho más confiable que uno evaluado por 10.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summary</span>(Rateprof<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>numRaters)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  10.00   15.00   24.00   28.58   37.00   86.00 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1">ols <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(quality <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> easiness <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> raterInterest, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> Rateprof)</span>
+<span id="cb48-2">wls <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lm</span>(quality <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> easiness <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> raterInterest, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> Rateprof,</span>
+<span id="cb48-3">          <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">weights =</span> numRaters)</span>
+<span id="cb48-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cbind</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">MCO =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(ols), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">WLS =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coef</span>(wls))</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     MCO        WLS
+(Intercept)   0.06614013 -0.1038398
+easiness      0.52671754  0.5195237
+raterInterest 0.56125107  0.6226929</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ver summary de ambos modelos">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ver summary de ambos modelos
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs"><li class="nav-item"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" aria-controls="tabset-3-1" aria-selected="true" href="">MCO</a></li><li class="nav-item"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" aria-controls="tabset-3-2" aria-selected="false" href="">WLS</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = quality ~ easiness + raterInterest, data = Rateprof)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.89212 -0.44561  0.02212  0.44789  1.53675 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    0.06614    0.21872   0.302    0.763    
+easiness       0.52672    0.04280  12.306   &lt;2e-16 ***
+raterInterest  0.56125    0.06024   9.316   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.6224 on 363 degrees of freedom
+Multiple R-squared:  0.4507,    Adjusted R-squared:  0.4477 
+F-statistic: 148.9 on 2 and 363 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = quality ~ easiness + raterInterest, data = Rateprof, 
+    weights = numRaters)
+
+Weighted Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.7158  -2.2589   0.1496   2.1725  10.4313 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -0.10384    0.22833  -0.455     0.65    
+easiness       0.51952    0.04366  11.898   &lt;2e-16 ***
+raterInterest  0.62269    0.06383   9.756   &lt;2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.352 on 363 degrees of freedom
+Multiple R-squared:  0.4445,    Adjusted R-squared:  0.4415 
+F-statistic: 145.3 on 2 and 363 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Acá los cambios son más moderados que en Strong Interaction [el efecto de <code>raterInterest</code> sube de 0.56 a 0.62], pero la interpretación es la misma: los profesores con más evaluaciones (promedios más precisos) pesan más en el ajuste.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Un detalle de la salida: el <code>Residual standard error</code> de WLS (<img src="https://latex.codecogs.com/png.latex?3.35">) no es comparable con el de MCO (<img src="https://latex.codecogs.com/png.latex?0.62">). En WLS, <img src="https://latex.codecogs.com/png.latex?%5Chat%7B%5Csigma%7D"> estima el <img src="https://latex.codecogs.com/png.latex?%5Csigma"> de una evaluación <strong>individual</strong>, no el de un promedio. Lo mismo pasa con los <code>Weighted Residuals</code>, que son <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7Bw_i%7D%5C,%5Chat%7Be%7D_i">.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="cerrando" class="level2">
+<h2 class="anchored" data-anchor-id="cerrando">Cerrando</h2>
+<div id="tbl-resumen" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-resumen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Resumen de la clase
+</figcaption>
+<div aria-describedby="tbl-resumen-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Problema</th>
+<th style="text-align: center;">Herramienta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Testear un coeficiente</td>
+<td style="text-align: center;">Test <img src="https://latex.codecogs.com/png.latex?t"> con <img src="https://latex.codecogs.com/png.latex?%5Csqrt%7B%5Chat%7Bv%7D_%7Bjj%7D%7D"></td>
+</tr>
+<tr class="even">
+<td>Testear una combinación lineal de coeficientes</td>
+<td style="text-align: center;">Test <img src="https://latex.codecogs.com/png.latex?t"> con <img src="https://latex.codecogs.com/png.latex?se(%5Chat%7B%5Cell%7D)%20=%20%5Csqrt%7Ba'%5Chat%7BV%7Da%7D"></td>
+</tr>
+<tr class="odd">
+<td>Testear varias restricciones a la vez</td>
+<td style="text-align: center;">Test <img src="https://latex.codecogs.com/png.latex?F"> de Wald con <img src="https://latex.codecogs.com/png.latex?L%5Cbeta%20=%20c"> (<code>car::linearHypothesis</code>)</td>
+</tr>
+<tr class="even">
+<td>Interpretar un rechazo</td>
+<td style="text-align: center;">Pensar en <img src="https://latex.codecogs.com/png.latex?f">, <img src="https://latex.codecogs.com/png.latex?%5Cgamma"> y <img src="https://latex.codecogs.com/png.latex?%5Calpha">; corregir por testeo múltiple</td>
+</tr>
+<tr class="odd">
+<td>Varianza no constante con pesos conocidos</td>
+<td style="text-align: center;">WLS (<code>lm(..., weights = w)</code>)</td>
+</tr>
+<tr class="even">
+<td>Observaciones que son promedios de <img src="https://latex.codecogs.com/png.latex?n_i"> datos</td>
+<td style="text-align: center;">WLS con <img src="https://latex.codecogs.com/png.latex?w_i%20=%20n_i"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>probabilidad</category>
+  <category>estadística</category>
+  <guid>https://canija2000.github.io/posts/clase 21/</guid>
+  <pubDate>Wed, 28 Oct 2026 03:00:00 GMT</pubDate>
+  <media:content url="https://canija2000.github.io/posts/clase 21/portada.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>Ejercicios I2 procesos estocasticos</title>
   <dc:creator>Joaquín Bächler</dc:creator>
@@ -45,7 +1758,7 @@
 <div>
 <svg id="mermaid-figure-1" width="672" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="flowchart" viewbox="0 0 219.734375 164.6953125" aria-roledescription="flowchart-v2" height="480">
 <style>#mermaid-figure-1{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#333;}@keyframes edge-animation-frame{from{stroke-dashoffset:0;}}@keyframes dash{to{stroke-dashoffset:0;}}#mermaid-figure-1 .edge-animation-slow{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 50s linear infinite;stroke-linecap:round;}#mermaid-figure-1 .edge-animation-fast{stroke-dasharray:9,5!important;stroke-dashoffset:900;animation:dash 20s linear infinite;stroke-linecap:round;}#mermaid-figure-1 .error-icon{fill:#552222;}#mermaid-figure-1 .error-text{fill:#552222;stroke:#552222;}#mermaid-figure-1 .edge-thickness-normal{stroke-width:1px;}#mermaid-figure-1 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-figure-1 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-figure-1 .edge-thickness-invisible{stroke-width:0;fill:none;}#mermaid-figure-1 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-figure-1 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-figure-1 .marker{fill:#333333;stroke:#333333;}#mermaid-figure-1 .marker.cross{stroke:#333333;}#mermaid-figure-1 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-figure-1 p{margin:0;}#mermaid-figure-1 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#333;}#mermaid-figure-1 .cluster-label text{fill:#333;}#mermaid-figure-1 .cluster-label span{color:#333;}#mermaid-figure-1 .cluster-label span p{background-color:transparent;}#mermaid-figure-1 .label text,#mermaid-figure-1 span{fill:#333;color:#333;}#mermaid-figure-1 .node rect,#mermaid-figure-1 .node circle,#mermaid-figure-1 .node ellipse,#mermaid-figure-1 .node polygon,#mermaid-figure-1 .node path{fill:#ECECFF;stroke:#9370DB;stroke-width:1px;}#mermaid-figure-1 .rough-node .label text,#mermaid-figure-1 .node .label text,#mermaid-figure-1 .image-shape .label,#mermaid-figure-1 .icon-shape .label{text-anchor:middle;}#mermaid-figure-1 .node .katex path{fill:#000;stroke:#000;stroke-width:1px;}#mermaid-figure-1 .rough-node .label,#mermaid-figure-1 .node .label,#mermaid-figure-1 .image-shape .label,#mermaid-figure-1 .icon-shape .label{text-align:center;}#mermaid-figure-1 .node.clickable{cursor:pointer;}#mermaid-figure-1 .root .anchor path{fill:#333333!important;stroke-width:0;stroke:#333333;}#mermaid-figure-1 .arrowheadPath{fill:#333333;}#mermaid-figure-1 .edgePath .path{stroke:#333333;stroke-width:2.0px;}#mermaid-figure-1 .flowchart-link{stroke:#333333;fill:none;}#mermaid-figure-1 .edgeLabel{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-figure-1 .edgeLabel p{background-color:rgba(232,232,232, 0.8);}#mermaid-figure-1 .edgeLabel rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaid-figure-1 .labelBkg{background-color:rgba(232, 232, 232, 0.5);}#mermaid-figure-1 .cluster rect{fill:#ffffde;stroke:#aaaa33;stroke-width:1px;}#mermaid-figure-1 .cluster text{fill:#333;}#mermaid-figure-1 .cluster span{color:#333;}#mermaid-figure-1 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(80, 100%, 96.2745098039%);border:1px solid #aaaa33;border-radius:2px;pointer-events:none;z-index:100;}#mermaid-figure-1 .flowchartTitleText{text-anchor:middle;font-size:18px;fill:#333;}#mermaid-figure-1 rect.text{fill:none;stroke-width:0;}#mermaid-figure-1 .icon-shape,#mermaid-figure-1 .image-shape{background-color:rgba(232,232,232, 0.8);text-align:center;}#mermaid-figure-1 .icon-shape p,#mermaid-figure-1 .image-shape p{background-color:rgba(232,232,232, 0.8);padding:2px;}#mermaid-figure-1 .icon-shape rect,#mermaid-figure-1 .image-shape rect{opacity:0.5;background-color:rgba(232,232,232, 0.8);fill:rgba(232,232,232, 0.8);}#mermaid-figure-1 .label-icon{display:inline-block;height:1em;overflow:visible;vertical-align:-0.125em;}#mermaid-figure-1 .node .label-icon path{fill:currentColor;stroke:revert;stroke-width:revert;}#mermaid-figure-1 :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}</style>
-<g><marker id="mermaid-1792085838799_flowchart-v2-pointEnd" class="marker flowchart-v2" viewbox="0 0 10 10" refx="5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-pointStart" class="marker flowchart-v2" viewbox="0 0 10 10" refx="4.5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-circleEnd" class="marker flowchart-v2" viewbox="0 0 10 10" refx="11" refy="5" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-1792085838799_flowchart-v2-circleStart" class="marker flowchart-v2" viewbox="0 0 10 10" refx="-1" refy="5" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-1792085838799_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewbox="0 0 11 11" refx="12" refy="5.2" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1792085838799_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewbox="0 0 11 11" refx="-1" refy="5.2" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M128.557,36.459L133.656,33.716C138.754,30.973,148.951,25.486,158.561,25.17C168.171,24.855,177.194,29.709,181.706,32.136L186.217,34.564" id="L_1_2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_1_2_0" data-points="W3sieCI6MTI4LjU1NzA5MjExMjA3MjE4LCJ5IjozNi40NTg3NzUwNTAxMzQ2NH0seyJ4IjoxNTkuMTQ4NDM3NSwieSI6MjB9LHsieCI6MTg5LjczOTc4Mjg4NzkyNzgyLCJ5IjozNi40NTg3NzUwNTAxMzQ2NH1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M189.74,47.541L184.641,50.284C179.543,53.027,169.346,58.514,159.736,58.83C150.125,59.145,141.103,54.291,136.591,51.864L132.08,49.436" id="L_2_1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_2_1_0" data-points="W3sieCI6MTg5LjczOTc4Mjg4NzkyNzgyLCJ5Ijo0Ny41NDEyMjQ5NDk4NjUzNn0seyJ4IjoxNTkuMTQ4NDM3NSwieSI6NjR9LHsieCI6MTI4LjU1NzA5MjExMjA3MjE4LCJ5Ijo0Ny41NDEyMjQ5NDk4NjUzNn1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M27.216,91.738L34.176,83.449C41.136,75.159,55.056,58.579,67.614,50.29C80.172,42,91.367,42,96.965,42L102.563,42" id="L_3_1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_3_1_0" data-points="W3sieCI6MjcuMjE1NjAzNzI2MzkzMjEyLCJ5Ijo5MS43Mzg0NDA1OTM4NjYxN30seyJ4Ijo2OC45NzY1NjI1LCJ5Ijo0Mn0seyJ4IjoxMDYuNTYyNSwieSI6NDJ9XQ==" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M31.391,100.695L37.655,100.695C43.919,100.695,56.448,100.695,68.537,103.296C80.626,105.896,92.276,111.097,98.101,113.697L103.926,116.297" id="L_3_4_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_3_4_0" data-points="W3sieCI6MzEuMzkwNjI1LCJ5IjoxMDAuNjk1MzEyNX0seyJ4Ijo2OC45NzY1NjI1LCJ5IjoxMDAuNjk1MzEyNX0seyJ4IjoxMDcuNTc4MzM0NTk1MDE0MzgsInkiOjExNy45Mjc4MDkzNjQyMjk2M31d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path><path d="M107.578,127.463L101.145,130.335C94.711,133.207,81.844,138.951,69.148,136.232C56.452,133.513,43.928,122.331,37.665,116.74L31.403,111.148" id="L_4_3_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_4_3_0" data-points="W3sieCI6MTA3LjU3ODMzNDU5NTAxNDM4LCJ5IjoxMjcuNDYyODE1NjM1NzcwMzd9LHsieCI6NjguOTc2NTYyNSwieSI6MTQ0LjY5NTMxMjV9LHsieCI6MjguNDE5Mzg0NzEzNDc4ODUsInkiOjEwOC40ODQ0NjUxMTY3MjY4NH1d" marker-end="url(#mermaid-1792085838799_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(159.1484375, 20)"><g class="label" data-id="L_1_2_0" transform="translate(-4.1953125, -12)"><foreignobject width="8.390625" height="24">
+<g><marker id="mermaid-1793278523256_flowchart-v2-pointEnd" class="marker flowchart-v2" viewbox="0 0 10 10" refx="5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1793278523256_flowchart-v2-pointStart" class="marker flowchart-v2" viewbox="0 0 10 10" refx="4.5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1793278523256_flowchart-v2-circleEnd" class="marker flowchart-v2" viewbox="0 0 10 10" refx="11" refy="5" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-1793278523256_flowchart-v2-circleStart" class="marker flowchart-v2" viewbox="0 0 10 10" refx="-1" refy="5" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><circle cx="5" cy="5" r="5" class="arrowMarkerPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></circle></marker><marker id="mermaid-1793278523256_flowchart-v2-crossEnd" class="marker cross flowchart-v2" viewbox="0 0 11 11" refx="12" refy="5.2" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><marker id="mermaid-1793278523256_flowchart-v2-crossStart" class="marker cross flowchart-v2" viewbox="0 0 11 11" refx="-1" refy="5.2" markerunits="userSpaceOnUse" markerwidth="11" markerheight="11" orient="auto"><path d="M 1,1 l 9,9 M 10,1 l -9,9" class="arrowMarkerPath" style="stroke-width: 2; stroke-dasharray: 1, 0;"></path></marker><g class="root"><g class="clusters"></g><g class="edgePaths"><path d="M128.557,36.459L133.656,33.716C138.754,30.973,148.951,25.486,158.561,25.17C168.171,24.855,177.194,29.709,181.706,32.136L186.217,34.564" id="L_1_2_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_1_2_0" data-points="W3sieCI6MTI4LjU1NzA5MjExMjA3MjE4LCJ5IjozNi40NTg3NzUwNTAxMzQ2NH0seyJ4IjoxNTkuMTQ4NDM3NSwieSI6MjB9LHsieCI6MTg5LjczOTc4Mjg4NzkyNzgyLCJ5IjozNi40NTg3NzUwNTAxMzQ2NH1d" marker-end="url(#mermaid-1793278523256_flowchart-v2-pointEnd)"></path><path d="M189.74,47.541L184.641,50.284C179.543,53.027,169.346,58.514,159.736,58.83C150.125,59.145,141.103,54.291,136.591,51.864L132.08,49.436" id="L_2_1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_2_1_0" data-points="W3sieCI6MTg5LjczOTc4Mjg4NzkyNzgyLCJ5Ijo0Ny41NDEyMjQ5NDk4NjUzNn0seyJ4IjoxNTkuMTQ4NDM3NSwieSI6NjR9LHsieCI6MTI4LjU1NzA5MjExMjA3MjE4LCJ5Ijo0Ny41NDEyMjQ5NDk4NjUzNn1d" marker-end="url(#mermaid-1793278523256_flowchart-v2-pointEnd)"></path><path d="M27.216,91.738L34.176,83.449C41.136,75.159,55.056,58.579,67.614,50.29C80.172,42,91.367,42,96.965,42L102.563,42" id="L_3_1_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_3_1_0" data-points="W3sieCI6MjcuMjE1NjAzNzI2MzkzMjEyLCJ5Ijo5MS43Mzg0NDA1OTM4NjYxN30seyJ4Ijo2OC45NzY1NjI1LCJ5Ijo0Mn0seyJ4IjoxMDYuNTYyNSwieSI6NDJ9XQ==" marker-end="url(#mermaid-1793278523256_flowchart-v2-pointEnd)"></path><path d="M31.391,100.695L37.655,100.695C43.919,100.695,56.448,100.695,68.537,103.296C80.626,105.896,92.276,111.097,98.101,113.697L103.926,116.297" id="L_3_4_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_3_4_0" data-points="W3sieCI6MzEuMzkwNjI1LCJ5IjoxMDAuNjk1MzEyNX0seyJ4Ijo2OC45NzY1NjI1LCJ5IjoxMDAuNjk1MzEyNX0seyJ4IjoxMDcuNTc4MzM0NTk1MDE0MzgsInkiOjExNy45Mjc4MDkzNjQyMjk2M31d" marker-end="url(#mermaid-1793278523256_flowchart-v2-pointEnd)"></path><path d="M107.578,127.463L101.145,130.335C94.711,133.207,81.844,138.951,69.148,136.232C56.452,133.513,43.928,122.331,37.665,116.74L31.403,111.148" id="L_4_3_0" class="edge-thickness-normal edge-pattern-solid edge-thickness-normal edge-pattern-solid flowchart-link" style=";" data-edge="true" data-et="edge" data-id="L_4_3_0" data-points="W3sieCI6MTA3LjU3ODMzNDU5NTAxNDM4LCJ5IjoxMjcuNDYyODE1NjM1NzcwMzd9LHsieCI6NjguOTc2NTYyNSwieSI6MTQ0LjY5NTMxMjV9LHsieCI6MjguNDE5Mzg0NzEzNDc4ODUsInkiOjEwOC40ODQ0NjUxMTY3MjY4NH1d" marker-end="url(#mermaid-1793278523256_flowchart-v2-pointEnd)"></path></g><g class="edgeLabels"><g class="edgeLabel" transform="translate(159.1484375, 20)"><g class="label" data-id="L_1_2_0" transform="translate(-4.1953125, -12)"><foreignobject width="8.390625" height="24">
 <div class="labelBkg" data-xmlns="http://www.w3.org/1999/xhtml" style="display: table-cell; white-space: nowrap; line-height: 1.5; max-width: 200px; text-align: center;">
 <span class="edgeLabel">
 <p>
@@ -269,6 +1982,29 @@
 </div>
 </div>
 <p>Que es exactamente lo que buscabamos. Ahora, veamos que en <em>[c]</em>, <img src="https://latex.codecogs.com/png.latex?P(T%3Et)%20=%20e%5E%7B-(%5Clambda_1%20+%20%5Clambda_2)%20t%7D">, que es exactmente una parte de la expresión que obtuvimos. De ahí podemos inferir que, efectivamente, <img src="https://latex.codecogs.com/png.latex?P(T_1%20%3C%20T_2)%20=%20%5Cfrac%7B%5Clambda_1%7D%7B%5Clambda_1%20+%20%5Clambda_2%7D"> y que los eventos <img src="https://latex.codecogs.com/png.latex?%5C%7BT%3Et%5C%7D%20%5Ctext%7B%20y%20%7D%20%5C%7BT_1%20%3C%20T_2%5C%7D"> son independientes.Esto tiene sentido en dos dimensiones: 1. Las densidades se multiplican 2. Notemos que el hecho de que la primera consulta llegue después de un tiempo <img src="https://latex.codecogs.com/png.latex?t"> no nos da información sobre si la primera consulta fue por teléfono o por chat.</p>
+<hr>
+</section>
+<section id="ejercicio-3" class="level3">
+<h3 class="anchored" data-anchor-id="ejercicio-3">Ejercicio 3</h3>
+<p>Una ferreteróa recibe pedidos según un proceso de Poisson $ {N_t} de parámetro <img src="https://latex.codecogs.com/png.latex?%5Clambda%20=4"> por hora.El pedido i-ésimo consta de <img src="https://latex.codecogs.com/png.latex?Y_i"> artículos, donde <img src="https://latex.codecogs.com/png.latex?Y_1,Y_2,%20%5Cldots"> son i.i.d. e independientes del proceso de llegadas, con : <img src="https://latex.codecogs.com/png.latex?%0AP(Y=1)%20=%200.5%20%5Cquad%20P(Y=2)%20=%200.3%20%5Cquad%20P(Y=3)%20=%200.2%0A"> El número total de artículos pedidos hasta el instante <img src="https://latex.codecogs.com/png.latex?t"> es <img src="https://latex.codecogs.com/png.latex?X_t%20=%20%5Csum%5E%7BN_t%7D_%7Bi=1%7D%20Y_i">, que define un proceso de Poisson compuesto.</p>
+<p><strong>[a]</strong> Calcule <img src="https://latex.codecogs.com/png.latex?E(Y)"> y <img src="https://latex.codecogs.com/png.latex?Var(Y)">. Obtenga luego <img src="https://latex.codecogs.com/png.latex?E(X_t)">,<img src="https://latex.codecogs.com/png.latex?Var(X_t)"> y la desviación estándar de <img src="https://latex.codecogs.com/png.latex?X_t"> para <img src="https://latex.codecogs.com/png.latex?t=3"> horas.</p>
+<div class="desarrollo callout callout-style-simple callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Desarrollo
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+La esperanza y la varianza de <img src="https://latex.codecogs.com/png.latex?Y"> las calculamos por definición: $$
+<img src="https://latex.codecogs.com/png.latex?%5Cbegin%7Baligned%7D%0AE(Y)%20&amp;=%201%20%5Ccdot%200.5%20+%202%20%5Ccdot%200.3%20+%203%20%5Ccdot%200.2%20=%201.7%5C%5C%0AE(Y%5E2)%20&amp;=%201%5E2%20%5Ccdot%200.5%20+%202%5E2%20%5Ccdot%200.3%20+%203%5E2%20%5Ccdot%200.2%20=%203.5%5C%5C%0AVar(Y)%20&amp;=%20E(Y%5E2)%20-%20E(Y)%5E2%20=%203.5%20-%201.7%5E2%20=%200.61%5C%5C%0A%5Ctext%7BLuego%20sabemos%20que%20:%7D%5C%5C%0AE(X_t)%20&amp;=%20%5Clambda%20t%20E(Y)%20=%204%5Ccdot%203%20%5Ccdot%201.7%20=%2020,4%5C%5C%0AVar(X_t)%20&amp;=%20%5Clambda%20t%20E(Y%5E2)%20=%204%5Ccdot%203%20%5Ccdot%203.5%20=%2042%5C%5C%0A%5Ctext%7By%20por%20lo%20tanto%20%7D%20%5Csigma(X_t)%20=%20%5Csqrt%7B42%7D%20%5Capprox%206.48%0A%5Cend%7Baligned%7D">
+</div>
+</div>
+</div>
 
 
 </section>
